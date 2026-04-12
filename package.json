@@ -1,0 +1,15 @@
+{
+	"name": "agenda-adm-lp-ccb",
+	"version": "1.0.0",
+	"description": "![Status](https://img.shields.io/badge/status-em%20uso-brightgreen)\r ![Frontend](https://img.shields.io/badge/frontend-HTML%20%7C%20CSS%20%7C%20JS-blue)\r ![Backend](https://img.shields.io/badge/backend-Google%20Apps%20Script-green)\r ![Database](https://img.shields.io/badge/database-Google%20Sheets-orange)",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"prettier": "^3.8.1"
+	}
+}

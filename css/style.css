@@ -1,0 +1,2014 @@
+/* ===========================
+   SCROLLBAR
+=========================== */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(33, 37, 41, 0.35);
+	border-radius: 10px;
+	border: 2px solid transparent;
+	background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(33, 37, 41, 0.6);
+}
+
+/* ===========================
+   BASE
+=========================== */
+body {
+	background-color: #f1f1f1;
+}
+
+#titulo {
+	font-weight: 400;
+	/* Mantém o tamanho natural do Bootstrap .h3 (~1.75rem desktop) */
+}
+
+.card .card-header {
+	background-color: #e9ecef;
+}
+
+#accordionInscritos {
+	--bs-accordion-active-bg: #212529;
+	--bs-accordion-active-color: #fff;
+	--bs-accordion-btn-focus-box-shadow: none;
+
+	/* remove ícone laranja */
+	--bs-accordion-btn-active-icon: var(--bs-accordion-btn-icon);
+}
+
+.accordion-item {
+	box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
+	margin-bottom: 6px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.accordion-button {
+	background: #212529;
+	color: #f1f1f1;
+}
+
+.accordion-button:not(.collapsed) {
+	background: #212529;
+	color: #f1f1f1;
+}
+
+.accordion-body {
+	background: #1f2327;
+	color: #f1f1f1;
+}
+
+#accordionInscritos .accordion-button.bg-dark::after {
+	filter: invert(1);
+}
+
+#accordionInscritos .accordion-item {
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+#accordionInscritos .accordion-item + .accordion-item {
+	margin-top: 5px;
+}
+
+/* ===========================
+   HEADER — layout com título sempre centrado
+=========================== */
+header .container {
+	padding-left: 0.75rem;
+	padding-right: 0.75rem;
+}
+
+/* Barra do header: botões nas pontas, título absolutamente centrado */
+.header-bar {
+	position: relative;
+	display: flex;
+	align-items: center;
+	min-height: 2.75rem;
+}
+
+.header-side {
+	flex: 0 0 auto;
+	z-index: 1;
+}
+
+.header-left {
+	margin-right: auto;
+}
+.header-right {
+	margin-left: auto;
+}
+
+/* Título centralizado absolutamente na largura total da barra */
+.header-center {
+	position: absolute;
+	left: 0;
+	right: 0;
+	text-align: center;
+	pointer-events: none; /* cliques passam pelos botões atrás */
+	padding: 0 0.5rem;
+}
+
+#titulo {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: clamp(1rem, 4vw, 1.65rem);
+	pointer-events: auto;
+	line-height: 1.4;
+}
+
+.alinhar-texto-esquerda {
+	text-align: left;
+}
+
+.home {
+	padding-bottom: 5rem;
+}
+
+@media (max-width: 576px) {
+	header {
+		padding: 0.65rem 0 !important;
+	}
+
+	#backButton {
+		font-size: 0.95rem;
+		padding: 0.55rem 0.85rem;
+		min-height: 2.75rem;
+	}
+
+	#adminButton {
+		padding: 0.55rem 0.75rem;
+		font-size: 1rem;
+		min-height: 2.75rem;
+	}
+
+	.home {
+		padding-bottom: 5.5rem;
+	}
+}
+
+/* ===========================
+   MAIN CONTENT
+=========================== */
+#conteudo {
+	padding-bottom: 2.5rem;
+}
+
+@media (max-width: 576px) {
+	#conteudo {
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+	}
+}
+
+/* ===========================
+   ADMIN CARDS
+=========================== */
+.admin-card {
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+	cursor: pointer;
+}
+
+.admin-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.18);
+}
+
+.admin-card .card-body {
+	padding: 2.25rem 1.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+}
+
+.admin-card .bi {
+	font-size: 3.2rem;
+	line-height: 1;
+}
+
+.admin-card h5 {
+	font-size: 1.15rem;
+	font-weight: 600;
+	margin: 0;
+}
+
+@media (max-width: 576px) {
+	.admin-card .card-body {
+		padding: 1.5rem 1.25rem;
+		flex-direction: row;
+		justify-content: flex-start;
+		gap: 1rem;
+		text-align: left;
+	}
+	.admin-card .bi {
+		font-size: 2rem !important;
+		flex-shrink: 0;
+	}
+	.admin-card h5 {
+		font-size: 1rem;
+		margin: 0;
+	}
+}
+
+/* ===========================
+   INPUTS (GLOBAL)
+=========================== */
+.form-control {
+	border: 2px solid #474747;
+	color: #000;
+}
+
+.form-control::placeholder {
+	color: #555;
+}
+
+.form-control:focus {
+	border-color: #000;
+	box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
+}
+
+.form-select {
+	/* estrutura */
+	border: 2px solid #474747;
+	border-radius: 0.5rem;
+	padding: 0.55rem 2.75rem 0.55rem 0.875rem;
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #1a1a1a;
+	background-color: #fff;
+	line-height: 1.5;
+	cursor: pointer;
+
+	/* seta SVG customizada — chevron fino e elegante */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23212529' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 0.75rem center;
+	background-size: 1rem;
+
+	/* transição */
+	transition:
+		border-color 0.18s ease,
+		box-shadow 0.18s ease,
+		background-color 0.18s ease;
+
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+.form-select:hover:not(:disabled):not(:focus) {
+	border-color: #212529;
+	background-color: #fafafa;
+}
+
+.form-select:focus {
+	border-color: #000;
+	box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.18);
+	background-color: #fff;
+	outline: none;
+	/* seta gira ao abrir */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'/%3E%3C/svg%3E");
+}
+
+.form-select:disabled {
+	background-color: #f5f5f5;
+	border-color: #ccc;
+	color: #999;
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+
+/* tamanhos */
+.form-select-lg {
+	padding: 0.7rem 3rem 0.7rem 1rem;
+	font-size: 1.05rem;
+	border-radius: 0.6rem;
+}
+
+.form-select-sm {
+	padding: 0.35rem 2.25rem 0.35rem 0.65rem;
+	font-size: 0.82rem;
+	border-radius: 0.375rem;
+}
+
+/* quando dentro de form-floating, ajusta o label */
+.form-floating > .form-select {
+	padding-top: 1.625rem;
+	padding-bottom: 0.625rem;
+}
+
+.form-floating > .form-select ~ label {
+	transform-origin: 0 0;
+	color: #6c757d;
+	transition:
+		opacity 0.1s ease-in-out,
+		transform 0.1s ease-in-out;
+}
+
+/* option — destaque visual */
+.form-select option {
+	font-weight: 400;
+	color: #1a1a1a;
+	background-color: #fff;
+	padding: 0.4rem 0.75rem;
+}
+
+.form-select option:checked,
+.form-select option:hover {
+	background-color: #212529;
+	color: #fff;
+}
+
+/* ===========================
+   RADIOS & CHECKBOXES (GLOBAL)
+=========================== */
+.form-check-input {
+	border: 2px solid #474747;
+}
+
+.form-check-input:checked {
+	background-color: #000;
+	border-color: #000;
+}
+
+.form-check-input:focus {
+	box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
+}
+
+/* ===========================
+   CURSOR
+=========================== */
+.cursor-pointer {
+	cursor: pointer;
+}
+
+/* ===========================
+   LINK MAPA
+=========================== */
+.link-mapa {
+	margin: 0.5rem 0 0.5rem 1rem;
+	color: #6c757d;
+	font-style: italic;
+	font-size: 1rem;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	text-decoration: none;
+}
+
+@media (max-width: 576px) {
+	.link-mapa {
+		margin-left: 0.5rem;
+		font-size: 0.9rem;
+	}
+}
+
+/* ===========================
+   MODAL FIXES MOBILE
+=========================== */
+@media (max-width: 576px) {
+	.modal-dialog {
+		margin: 0.5rem;
+	}
+
+	.modal-dialog-centered {
+		min-height: calc(100% - 1rem);
+	}
+
+	.modal-body {
+		padding: 1rem;
+	}
+
+	.modal-footer {
+		padding: 0.75rem 1rem;
+		gap: 0.5rem;
+	}
+
+	.modal-footer .btn {
+		flex: 1;
+		min-width: 0;
+	}
+}
+
+@media (max-width: 1000px) {
+	#modalAdmin .modal-dialog {
+		margin-top: 10vh;
+		align-items: flex-start;
+	}
+}
+
+/* ===========================
+   LOCAIS - LISTA
+=========================== */
+
+.render-item {
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+	cursor: pointer;
+	background-color: #fff;
+}
+
+.render-item:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.18);
+}
+
+.transition-icon {
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease;
+}
+
+/* ===========================
+   COLLAPSE LOCAIS
+=========================== */
+#collapseLocais {
+	overflow: hidden;
+	max-height: 500px;
+	transition:
+		max-height 0.35s ease,
+		opacity 0.25s ease;
+	opacity: 1;
+}
+
+#collapseLocais.fechado {
+	max-height: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* ===========================
+   LISTA VOLUNTARIOS
+=========================== */
+#listaVoluntarios {
+	transition: all 0.35s ease;
+	overflow: hidden;
+}
+
+#listaVoluntarios.modo-edicao {
+	background-color: #fff;
+	transform: scale(1.02);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+#listaVoluntarios ul {
+	transition:
+		max-height 0.35s ease,
+		opacity 0.3s ease;
+}
+
+/* ===========================
+   TABELAS RESPONSIVAS
+=========================== */
+.table-responsive {
+	-webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+	.table th,
+	.table td {
+		font-size: 0.85rem;
+		padding: 0.4rem 0.5rem;
+	}
+}
+
+/* ===========================
+   NOME SALVO CARD
+=========================== */
+#nomeSalvoCard .card {
+	border-width: 2px;
+}
+
+/* ===========================
+   BUTTONS MOBILE
+=========================== */
+@media (max-width: 576px) {
+	.btn-lg {
+		font-size: 1.05rem;
+		padding: 0.9rem 1.25rem;
+		border-radius: 0.6rem;
+	}
+
+	/* Stacked action buttons on mobile */
+	.d-flex.gap-2.justify-content-center.justify-content-md-end {
+		flex-direction: column;
+	}
+
+	.d-flex.gap-2.justify-content-center.justify-content-md-end .btn {
+		width: 100%;
+	}
+}
+
+/* ===========================
+   ACCORDION MOBILE
+=========================== */
+@media (max-width: 576px) {
+	.accordion-button {
+		font-size: 0.9rem;
+		padding: 0.65rem 0.85rem;
+	}
+
+	.accordion-body {
+		padding: 0.75rem;
+	}
+
+	.list-group-item {
+		padding: 0.6rem 0.75rem;
+		font-size: 0.9rem;
+	}
+}
+
+/* ===========================
+   CARDS ADMIN GRID MOBILE
+=========================== */
+@media (max-width: 576px) {
+	.row.g-4 > .col-md-4 {
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+}
+
+/* ===========================
+   INSCRITOS LIST ITEMS
+=========================== */
+.list-group-item .btn-sm {
+	flex-shrink: 0;
+}
+
+@media (max-width: 400px) {
+	.list-group-item {
+		flex-wrap: wrap;
+		gap: 0.25rem;
+	}
+}
+
+#listaAgendamentos .agendamentos-item {
+	text-align: left;
+}
+
+.agendamentos-item.bg-dark .text-muted {
+	color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.card-header .text-muted {
+	color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ===========================
+   INPUT FILTERS — FEEDBACK
+=========================== */
+
+/* Flash vermelho rápido quando caractere é bloqueado */
+@keyframes inputBloqueado {
+	0% {
+		border-color: #dc3545;
+		box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.35);
+	}
+	100% {
+		border-color: #474747;
+		box-shadow: none;
+	}
+}
+
+.input-bloqueado {
+	animation: inputBloqueado 0.35s ease-out forwards;
+}
+
+/* ===========================
+   SENHA — BOTÃO OLHO
+=========================== */
+
+#btnToggleSenha {
+	border: 2px solid #474747;
+	border-left: none;
+	color: #474747;
+	background: #fff;
+	transition: color 0.2s ease;
+}
+
+#btnToggleSenha:hover {
+	color: #000;
+	background: #f8f9fa;
+}
+
+#btnToggleSenha:focus {
+	box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.15);
+	outline: none;
+}
+
+/* Garante que input-group com o campo senha fique certo */
+#modalAdmin .input-group .form-control {
+	border-right: none;
+}
+
+#modalAdmin .input-group .form-control:focus {
+	border-right: none;
+	box-shadow: none;
+}
+
+#modalAdmin .input-group:focus-within .form-control,
+#modalAdmin .input-group:focus-within #btnToggleSenha {
+	border-color: #000;
+}
+
+#modalAdmin .input-group:focus-within .form-control {
+	box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
+}
+
+/* ===========================
+   UI LOCK — BOTÕES TRAVADOS
+=========================== */
+
+/* Cursor de espera em todos os botões desabilitados durante carregamento */
+.ui-locked:disabled,
+.ui-locked[disabled] {
+	cursor: wait !important;
+	opacity: 0.55;
+}
+
+/* Botão Voltar travado */
+#backButton.ui-locked {
+	cursor: wait !important;
+	opacity: 0.55;
+}
+
+/* ===========================
+   MODAL — BOTÕES TRAVADOS
+=========================== */
+
+.modal-ui-locked:disabled,
+.modal-ui-locked[disabled] {
+	cursor: wait !important;
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+/* ===========================
+   AGENDA SELECT — refinamento
+=========================== */
+
+/* Borda de destaque no lado esquerdo ao focar */
+.form-select.agenda-select:focus {
+	border-left-width: 3px;
+	padding-left: calc(0.875rem - 1px);
+}
+
+/* Dentro de modal: fundo levemente diferenciado */
+.modal .form-select.agenda-select {
+	background-color: #fefefe;
+}
+
+.modal .form-select.agenda-select:focus {
+	background-color: #fff;
+}
+
+/* optgroup refinado */
+.form-select.agenda-select optgroup {
+	font-weight: 700;
+	color: #555;
+	font-size: 0.82rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AGENDA SELECT — Custom Dropdown Profissional
+   Substitui o <select> nativo por um componente estilizado
+═══════════════════════════════════════════════════════════ */
+
+/* ── Wrapper ─────────────────────────────────────────────── */
+.agenda-select-wrapper {
+	position: relative;
+	width: 100%;
+	font-family: inherit;
+}
+
+.ds-floating .agenda-select-wrapper,
+.form-floating .agenda-select-wrapper {
+	width: 100%;
+}
+
+/* ── Trigger (botão que mostra o valor selecionado) ─────── */
+.agenda-select-trigger {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-height: 3.125rem;
+	padding: 0.55rem 0.875rem;
+	border: 2px solid #474747;
+	border-radius: 0.5rem;
+	background-color: #fff;
+	color: #1a1a1a;
+	font-size: 0.95rem;
+	font-weight: 500;
+	line-height: 1.5;
+	cursor: pointer;
+	text-align: left;
+	transition:
+		border-color 0.18s ease,
+		box-shadow 0.18s ease,
+		background-color 0.18s ease;
+	gap: 0.5rem;
+	user-select: none;
+	outline: none;
+}
+
+.modal .agenda-select-trigger {
+	background-color: #fefefe;
+}
+
+.agenda-select-trigger:hover:not(:disabled) {
+	border-color: #212529;
+	background-color: #fafafa;
+}
+
+.agenda-select-trigger:focus {
+	border-color: #000;
+	border-left-width: 3px;
+	box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.15);
+}
+
+.agenda-select-wrapper.ds-open .agenda-select-trigger {
+	border-color: #000;
+	border-left-width: 3px;
+	box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.15);
+	background-color: #fff;
+	border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.agenda-select-trigger:disabled,
+.agenda-select-trigger.ds-disabled {
+	background-color: #f5f5f5;
+	border-color: #ccc;
+	color: #999;
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+
+/* ── Partes internas do trigger ─────────────────────────── */
+.ds-trigger-icon {
+	display: flex;
+	align-items: center;
+	color: #555;
+	font-size: 1rem;
+	flex-shrink: 0;
+}
+
+.ds-trigger-text {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	transition: color 0.15s;
+}
+
+.ds-trigger-text.ds-placeholder {
+	color: #6c757d;
+	font-weight: 400;
+}
+
+.ds-trigger-arrow {
+	display: flex;
+	align-items: center;
+	color: #555;
+	flex-shrink: 0;
+	transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agenda-select-wrapper.ds-open .ds-trigger-arrow {
+	transform: rotate(180deg);
+	color: #000;
+}
+
+/* ── Dropdown container ─────────────────────────────────── */
+.agenda-select-dropdown {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 1055;
+	background: #fff;
+	border: 2px solid #000;
+	border-top: none;
+	border-radius: 0 0 0.5rem 0.5rem;
+	box-shadow:
+		0 8px 24px rgba(0, 0, 0, 0.14),
+		0 2px 8px rgba(0, 0, 0, 0.08);
+	overflow: hidden;
+
+	/* Estado fechado */
+	max-height: 0;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-4px);
+	transition:
+		max-height 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+		opacity 0.18s ease,
+		visibility 0.18s ease,
+		transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agenda-select-wrapper.ds-open .agenda-select-dropdown {
+	max-height: 260px;
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+	overflow-y: auto;
+}
+
+/* Scroll customizado */
+.agenda-select-dropdown::-webkit-scrollbar {
+	width: 5px;
+}
+.agenda-select-dropdown::-webkit-scrollbar-track {
+	background: #f5f5f5;
+}
+.agenda-select-dropdown::-webkit-scrollbar-thumb {
+	background: #ccc;
+	border-radius: 4px;
+}
+.agenda-select-dropdown::-webkit-scrollbar-thumb:hover {
+	background: #999;
+}
+
+/* Dropup: abre para cima */
+.agenda-select-wrapper.ds-dropup .agenda-select-dropdown {
+	top: auto;
+	bottom: 100%;
+	border-top: 2px solid #000;
+	border-bottom: none;
+	border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.agenda-select-wrapper.ds-open.ds-dropup .agenda-select-trigger {
+	border-radius: 0 0 0.5rem 0.5rem;
+}
+
+/* ── Lista de opções ────────────────────────────────────── */
+.ds-options-list {
+	list-style: none;
+	margin: 0;
+	padding: 0.375rem 0;
+}
+
+.ds-options-list li[data-value] {
+	display: flex;
+	align-items: center;
+	padding: 0.55rem 1rem;
+	font-size: 0.93rem;
+	font-weight: 400;
+	color: #1a1a1a;
+	cursor: pointer;
+	transition:
+		background-color 0.12s ease,
+		color 0.12s ease,
+		padding-left 0.12s ease;
+	outline: none;
+	user-select: none;
+	position: relative;
+}
+
+.ds-options-list li[data-value]::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background: transparent;
+	transition: background 0.12s ease;
+}
+
+.ds-options-list li[data-value]:hover,
+.ds-options-list li[data-value]:focus {
+	background-color: #f5f5f5;
+	color: #000;
+	padding-left: 1.25rem;
+}
+
+.ds-options-list li[data-value]:hover::before,
+.ds-options-list li[data-value]:focus::before {
+	background: #212529;
+}
+
+/* Opção selecionada */
+.ds-options-list li[data-value].ds-selected {
+	background-color: #212529;
+	color: #fff;
+	font-weight: 500;
+	padding-left: 1.25rem;
+}
+
+.ds-options-list li[data-value].ds-selected::before {
+	background: #fff;
+}
+
+.ds-options-list li[data-value].ds-selected:hover,
+.ds-options-list li[data-value].ds-selected:focus {
+	background-color: #333;
+	color: #fff;
+}
+
+/* Opção desabilitada */
+.ds-options-list li[data-value].ds-option-disabled {
+	color: #aaa;
+	cursor: not-allowed;
+	font-style: italic;
+}
+
+.ds-options-list li[data-value].ds-option-disabled:hover {
+	background-color: transparent;
+	padding-left: 1rem;
+}
+
+/* Divisor entre grupos */
+.ds-options-list li.ds-divider {
+	border-top: 1px solid #e9ecef;
+	margin: 0.25rem 0;
+	padding: 0;
+}
+
+/* ── form-floating — label flutuante ────────────────────── */
+.form-floating .agenda-select-wrapper {
+	height: 100%;
+}
+
+.form-floating > .agenda-select-wrapper ~ label,
+.form-floating > label:has(~ .agenda-select-wrapper) {
+	/* label controlada pelo Bootstrap floating */
+}
+
+/* Hack para compatibilidade form-floating */
+.form-floating > .agenda-select-wrapper {
+	position: relative;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CALENDÁRIO DE AGENDAMENTOS
+═══════════════════════════════════════════════════════════ */
+
+/* ── Navegação do mês ───────────────────────────────────── */
+.cal-nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	margin-bottom: 0.75rem;
+	padding: 0.65rem 0.85rem;
+	background: #212529;
+	border-radius: 0.6rem;
+	color: #fff;
+}
+
+.cal-mes-titulo {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.2rem;
+	flex: 1;
+}
+
+.cal-mes-nome {
+	font-size: 0.95rem;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+}
+
+.cal-mes-badge {
+	font-size: 0.68rem;
+	background: rgba(255, 255, 255, 0.14);
+	border-radius: 999px;
+	padding: 0.1rem 0.6rem;
+	color: rgba(255, 255, 255, 0.75);
+}
+
+.cal-nav-btn {
+	width: 2.1rem;
+	height: 2.1rem;
+	border-radius: 0.4rem;
+	border: 1px solid rgba(255, 255, 255, 0.22);
+	background: transparent;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.9rem;
+	cursor: pointer;
+	flex-shrink: 0;
+	transition:
+		background 0.14s,
+		border-color 0.14s;
+}
+
+.cal-nav-btn:hover:not(:disabled) {
+	background: rgba(255, 255, 255, 0.16);
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.cal-nav-btn:disabled {
+	opacity: 0.25;
+	cursor: not-allowed;
+}
+
+/* ── Pills de meses ─────────────────────────────────────── */
+.cal-pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	justify-content: center;
+	margin-bottom: 0.75rem;
+}
+
+.cal-pill {
+	padding: 0.22rem 0.8rem;
+	border-radius: 999px;
+	border: 1px solid #dee2e6;
+	background: #fff;
+	font-size: 0.75rem;
+	font-weight: 500;
+	color: #6c757d;
+	cursor: pointer;
+	transition: all 0.13s;
+}
+
+.cal-pill:hover {
+	border-color: #495057;
+	color: #212529;
+}
+.cal-pill-ativo {
+	background: #212529;
+	border-color: #212529;
+	color: #fff;
+}
+
+/* ── Grade ──────────────────────────────────────────────── */
+.cal-grid-wrapper {
+	background: #c8cdd3;
+	border-radius: 0.7rem;
+	padding: 3px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.09);
+	overflow: hidden;
+}
+
+.cal-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 3px;
+}
+
+/* ── Cabeçalho ──────────────────────────────────────────── */
+.cal-header-dia {
+	background: #343a40;
+	color: rgba(255, 255, 255, 0.82);
+	text-align: center;
+	font-size: 0.64rem;
+	font-weight: 700;
+	padding: 0.45rem 0.1rem;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	border-radius: 0.25rem;
+}
+
+.cal-header-dia.cal-fds {
+	color: rgba(255, 255, 255, 0.38);
+}
+
+/* ── Células ────────────────────────────────────────────── */
+.cal-cell {
+	aspect-ratio: 1 / 1;
+	padding: 0.28rem 0.2rem 0.18rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.14rem;
+	background: #fff;
+	border-radius: 0.3rem;
+	border: 1px solid #d5d9de;
+	transition:
+		filter 0.12s,
+		transform 0.1s;
+	min-width: 0;
+}
+
+.cal-cell.cal-vazia {
+	background: #eef0f2;
+	border-color: #dde0e3;
+}
+
+.cal-cell.cal-fds .cal-num {
+	color: #b0b8c1;
+}
+
+/* Hoje */
+.cal-cell.cal-hoje {
+	border-color: #212529 !important;
+}
+.cal-cell.cal-hoje .cal-num {
+	background: #212529;
+	color: #fff;
+	border-radius: 50%;
+	width: 1.5rem;
+	height: 1.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 0.75rem;
+}
+
+.cal-num {
+	font-size: 0.75rem;
+	font-weight: 500;
+	color: #343a40;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.cal-clicavel {
+	cursor: pointer;
+}
+
+.cal-cell.cal-tem-evento:hover {
+	filter: brightness(0.93);
+	transform: scale(0.96);
+}
+
+.cal-cell.cal-tem-evento:active {
+	transform: scale(0.92);
+}
+
+/* ── Pílulas mobile (bolinhas) ──────────────────────────── */
+.cal-ev-pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.14rem;
+	justify-content: center;
+}
+
+.cal-ev-pill {
+	width: 0.48rem;
+	height: 0.48rem;
+	border-radius: 50%;
+	flex-shrink: 0;
+	display: block;
+}
+
+.cal-ev-mais {
+	font-size: 0.52rem;
+	font-weight: 700;
+	color: #6c757d;
+	line-height: 1;
+}
+
+/* =========================
+   Evento público compacto
+========================= */
+
+/* ===============================
+   EVENTO PÚBLICO (CORRIGIDO)
+================================ */
+
+/* Mobile: só bolinha */
+.cal-ev-publico {
+	display: none;
+}
+
+.cal-ev-publico-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 4px;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+	.cal-ev-publico-wrapper {
+		display: block; /* 🔥 REMOVE o flex esticado */
+	}
+
+	.cal-ev-publico {
+		display: block;
+		margin-top: 2px;
+		font-size: 0.7rem;
+		overflow: hidden;
+		line-height: 1.15;
+	}
+
+	.cal-ev-nome {
+		font-weight: 600;
+		font-size: 0.9rem;
+		font-weight: 650;
+	}
+
+	.cal-ev-info {
+		font-size: 0.85rem;
+		font-weight: 450;
+	}
+
+	.cal-ev-nome,
+	.cal-ev-info {
+		word-break: break-word;
+		white-space: normal;
+	}
+
+	.cal-ev-pills {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		overflow: hidden;
+	}
+}
+
+/* Espaçamento só para exportação */
+.cal-wrapper.exportando {
+	padding: 12px 16px; /* pequeno espaço lateral */
+	background: #ffffff; /* garante fundo branco */
+}
+
+/* ── Desktop: células retangulares compactas ────────────── */
+@media (min-width: 768px) {
+	.cal-grid-wrapper {
+		padding: 4px;
+	}
+	.cal-grid {
+		gap: 4px;
+	}
+
+	.cal-header-dia {
+		font-size: 0.68rem;
+		padding: 0.5rem 0.3rem;
+		border-radius: 0.3rem;
+	}
+
+	.cal-cell {
+		aspect-ratio: auto;
+		min-height: 3.8rem;
+		padding: 0.35rem 0.4rem 0.3rem;
+		align-items: flex-start;
+		gap: 0.22rem;
+		border-radius: 0.35rem;
+	}
+
+	.cal-num {
+		font-size: 0.8rem;
+		font-weight: 600;
+		justify-content: flex-start;
+	}
+
+	.cal-cell.cal-hoje .cal-num {
+		width: 1.5rem;
+		height: 1.5rem;
+		justify-content: center;
+		font-size: 0.75rem;
+	}
+
+	/* No desktop, pílulas viram tags com nome do local */
+	.cal-ev-pills {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.17rem;
+		width: 100%;
+		justify-content: flex-start;
+	}
+
+	.cal-ev-pill {
+		width: 100%;
+		height: auto;
+		border-radius: 0.2rem;
+		padding: 0.1rem 0.3rem;
+		font-size: 0.6rem;
+		font-weight: 600;
+		color: #fff;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		line-height: 1.4;
+		letter-spacing: 0.01em;
+	}
+
+	.cal-ev-pill::after {
+		content: attr(data-nome);
+	}
+
+	.cal-ev-mais {
+		font-size: 0.58rem;
+		padding-left: 0.15rem;
+		color: #868e96;
+	}
+}
+
+/* ── Legenda ────────────────────────────────────────────── */
+.cal-legenda {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 0.5rem 1rem;
+	margin-top: 0.75rem;
+}
+
+.cal-leg-item {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	font-size: 0.75rem;
+	color: #495057;
+	font-weight: 500;
+}
+
+.cal-leg-dot {
+	width: 0.6rem;
+	height: 0.6rem;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+/* ── Animações ──────────────────────────────────────────── */
+@keyframes calSlideEsq {
+	from {
+		opacity: 0;
+		transform: translateX(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes calSlideDir {
+	from {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.cal-anim-esq {
+	animation: calSlideEsq 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cal-anim-dir {
+	animation: calSlideDir 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Cards de detalhe ───────────────────────────────────── */
+.cal-det-card {
+	border-radius: 0.75rem;
+	padding: 0.875rem 1rem;
+	margin-bottom: 0.65rem;
+}
+
+.cal-det-card:last-child {
+	margin-bottom: 0;
+}
+
+.cal-det-tipo {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.95rem;
+	margin-bottom: 0.6rem;
+	padding-bottom: 0.5rem;
+}
+
+.cal-det-local-dot {
+	width: 0.65rem;
+	height: 0.65rem;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.cal-det-infos {
+	display: flex;
+	flex-direction: column;
+	gap: 0.42rem;
+}
+
+.cal-det-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+	font-size: 0.87rem;
+	color: #343a40;
+}
+
+.cal-det-row i {
+	font-size: 0.88rem;
+	flex-shrink: 0;
+	margin-top: 0.1rem;
+}
+
+.cal-det-vestimenta {
+	border-radius: 0.4rem;
+	padding: 0.4rem 0.6rem;
+	margin-top: 0.1rem;
+}
+
+/* ===========================
+   LINK MAPA
+=========================== */
+.cal-link-mapa {
+	color: #6c757d;
+	font-style: italic;
+	cursor: pointer;
+	width: 100%;
+	text-decoration: none;
+}
+
+@media (max-width: 576px) {
+	.cal-link-mapa {
+		font-size: 0.9rem;
+	}
+}
+
+/* ── Mobile: células quadradas ──────────────────────────── */
+@media (max-width: 576px) {
+	.cal-grid-wrapper {
+		padding: 2px;
+	}
+	.cal-grid {
+		gap: 2px;
+	}
+
+	.cal-cell {
+		padding: 0.2rem 0.1rem 0.14rem;
+		border-radius: 0.25rem;
+	}
+
+	.cal-num {
+		font-size: 0.65rem;
+	}
+	.cal-cell.cal-hoje .cal-num {
+		width: 1.3rem;
+		height: 1.3rem;
+		font-size: 0.65rem;
+	}
+
+	.cal-ev-pill {
+		width: 0.42rem;
+		height: 0.42rem;
+	}
+	.cal-ev-mais {
+		font-size: 0.5rem;
+	}
+
+	.cal-header-dia {
+		font-size: 0.55rem;
+		padding: 0.38rem 0.05rem;
+		letter-spacing: 0;
+	}
+
+	.cal-mes-nome {
+		font-size: 0.9rem;
+	}
+	.cal-nav {
+		padding: 0.55rem 0.65rem;
+	}
+}
+
+@media (max-width: 380px) {
+	.cal-grid-wrapper {
+		padding: 1px;
+	}
+	.cal-grid {
+		gap: 1px;
+	}
+
+	.cal-cell {
+		padding: 0.14rem 0.05rem 0.1rem;
+		border-radius: 0.18rem;
+	}
+
+	.cal-num {
+		font-size: 0.58rem;
+	}
+	.cal-cell.cal-hoje .cal-num {
+		width: 1.1rem;
+		height: 1.1rem;
+		font-size: 0.58rem;
+	}
+
+	.cal-ev-pill {
+		width: 0.34rem;
+		height: 0.34rem;
+	}
+	.cal-ev-mais {
+		font-size: 0.44rem;
+	}
+
+	.cal-header-dia {
+		font-size: 0.48rem;
+		padding: 0.3rem 0.02rem;
+		letter-spacing: 0;
+	}
+
+	.cal-mes-nome {
+		font-size: 0.82rem;
+	}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVO GLOBAL — componentes grandes em todas as telas
+═══════════════════════════════════════════════════════════ */
+
+/* ── Wrapper geral centralizado ─────────────────────────── */
+.tela-wrapper {
+	max-width: 680px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+/* ── Cards de local/setor no mobile ───────────────── */
+.card-item {
+	border-radius: 0.75rem;
+	border: 1.5px solid #dee2e6;
+	background: #fff;
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+	overflow: hidden;
+	transition:
+		box-shadow 0.18s,
+		transform 0.15s;
+}
+
+.card-item:active {
+	transform: scale(0.985);
+}
+
+.card-item-header {
+	background: #212529;
+	color: #fff;
+	padding: 0.75rem 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+
+.card-item-header strong {
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.card-item-body {
+	padding: 0.875rem 1rem;
+}
+
+.card-item-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.9rem;
+	color: #495057;
+	margin-bottom: 0.4rem;
+}
+
+.card-item-row:last-child {
+	margin-bottom: 0;
+}
+
+.card-item-row i {
+	color: #6c757d;
+	font-size: 0.9rem;
+	flex-shrink: 0;
+}
+
+.card-item-actions {
+	display: flex;
+	gap: 0.5rem;
+	padding: 0.75rem 1rem;
+	border-top: 1px solid #f0f0f0;
+}
+
+.card-item-actions .btn {
+	flex: 1;
+	font-size: 0.85rem;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+}
+
+/* ── Grade de escolha (locais, datas, setores) ─────── */
+.grade-escolha {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	max-width: 600px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.grade-escolha .btn {
+	width: 100%;
+	padding: 1rem 1.25rem;
+	font-size: 1.05rem;
+	font-weight: 500;
+	border-radius: 0.65rem;
+	text-align: left;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	min-height: 3.5rem;
+	white-space: normal;
+	line-height: 1.3;
+}
+
+.grade-escolha .btn i {
+	font-size: 1.3rem;
+	flex-shrink: 0;
+}
+
+.grade-escolha .btn:hover small {
+	color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.grade-escolha .obs-card {
+	width: 100%;
+}
+
+/* ── Inscritos — accordion mais gordo ───────────────────── */
+.accordion-button {
+	font-size: 1rem;
+	font-weight: 600;
+	padding: 1rem 1.1rem;
+}
+
+.accordion-body {
+	padding: 0.875rem;
+}
+
+.list-group-item {
+	padding: 0.85rem 1rem;
+	font-size: 0.95rem;
+}
+
+@media (max-width: 576px) {
+	.accordion-button {
+		font-size: 0.95rem;
+		padding: 0.9rem 1rem;
+	}
+	.list-group-item {
+		padding: 0.75rem 0.875rem;
+		font-size: 0.92rem;
+	}
+}
+
+/* ── Painel admin — grid adaptável ──────────────────────── */
+.admin-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.25rem;
+	max-width: 780px;
+	margin: 0 auto;
+}
+
+@media (max-width: 576px) {
+	.admin-grid {
+		grid-template-columns: 1fr;
+		gap: 0.85rem;
+		max-width: 100%;
+	}
+}
+
+/* ── Tela de confirmar presença ─────────────────────────── */
+.confirmar-wrapper {
+	max-width: 480px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.confirmar-wrapper .form-control-lg {
+	font-size: 1.1rem;
+	padding: 0.875rem 1rem;
+	border-radius: 0.6rem;
+}
+
+/* ── Botão de novo (topo das listas) ────────────────────── */
+.barra-topo {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	margin-bottom: 0.875rem;
+}
+
+.barra-topo .btn {
+	font-size: 0.9rem;
+	padding: 0.45rem 1rem;
+	border-radius: 0.5rem;
+	font-weight: 500;
+}
+
+/* ── Badges de setor ──────────────────────────────── */
+.badge-setor {
+	display: inline-block;
+	background: #212529;
+	color: #fff;
+	font-size: 0.7rem;
+	font-weight: 500;
+	padding: 0.22rem 0.6rem;
+	border-radius: 999px;
+	margin: 0.1rem 0.1rem;
+}
+
+/* ── Status chips (cordas/sopros) ───────────────────────── */
+.status-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	font-size: 0.82rem;
+	padding: 0.25rem 0.6rem;
+	border-radius: 999px;
+	font-weight: 500;
+}
+
+.status-chip-ok {
+	background: #d1e7dd;
+	color: #0a3622;
+}
+.status-chip-no {
+	background: #f8d7da;
+	color: #58151c;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CARDS UNIVERSAIS — item-card, grupo-secao
+═══════════════════════════════════════════════════════════ */
+
+/* ── Card base ──────────────────────────────────────────── */
+.item-card {
+	background: #fff;
+	border-radius: 0.875rem;
+	border: 1.5px solid #e9ecef;
+	overflow: hidden;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+	transition:
+		box-shadow 0.18s,
+		transform 0.15s;
+}
+
+.item-card:hover {
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.item-card-compacto {
+	border-radius: 0.65rem;
+	border-color: #f0f1f3;
+}
+
+/* ── Header do card ─────────────────────────────────────── */
+.item-card-header {
+	background: #212529;
+	color: #fff;
+	padding: 0.75rem 1rem;
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+.item-card-titulo {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1rem;
+	font-weight: 600;
+	flex: 1;
+	min-width: 0;
+}
+
+.item-card-titulo span {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.item-card-titulo i {
+	flex-shrink: 0;
+	opacity: 0.8;
+}
+
+.item-card-badge {
+	font-size: 0.72rem;
+	background: rgba(255, 255, 255, 0.18);
+	color: rgba(255, 255, 255, 0.9);
+	padding: 0.2rem 0.65rem;
+	border-radius: 999px;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+/* ── Body do card ───────────────────────────────────────── */
+.item-card-body {
+	padding: 0.875rem 1rem;
+}
+
+.card-info-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.55rem;
+	font-size: 0.88rem;
+	color: #495057;
+	margin-bottom: 0.55rem;
+	line-height: 1.4;
+}
+
+.card-info-row:last-child {
+	margin-bottom: 0;
+}
+
+.card-info-row > i {
+	color: #9ca3af;
+	font-size: 0.85rem;
+	margin-top: 0.12rem;
+	flex-shrink: 0;
+}
+
+/* Grid de 2 colunas para info compacta */
+.card-info-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.5rem;
+	margin-top: 0.35rem;
+}
+
+.card-info-cell {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: 0.83rem;
+	color: #6b7280;
+	background: #f9fafb;
+	padding: 0.35rem 0.6rem;
+	border-radius: 0.4rem;
+}
+
+.card-info-cell i {
+	font-size: 0.8rem;
+	flex-shrink: 0;
+	color: #9ca3af;
+}
+
+/* ── Ações do card ──────────────────────────────────────── */
+.item-card-actions {
+	display: flex;
+	gap: 0.5rem;
+	padding: 0.65rem 1rem;
+	border-top: 1px solid #f3f4f6;
+	background: #fafafa;
+}
+
+.item-card-actions .btn {
+	flex: 1;
+	font-size: 0.85rem;
+	padding: 0.45rem 0.75rem;
+	border-radius: 0.5rem;
+	font-weight: 500;
+}
+
+/* ── Círculo de ícone ───────────────────────────────────── */
+.item-card-icon-circle {
+	width: 2.1rem;
+	height: 2.1rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	font-size: 0.9rem;
+}
+
+/* ── Seção agrupadora ───────────────────────────────────── */
+.grupo-secao {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.grupo-secao-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.6rem 0.875rem;
+	background: #212529;
+	color: #fff;
+	font-size: 0.88rem;
+	font-weight: 600;
+	border-radius: 0.65rem 0.65rem 0 0;
+	letter-spacing: 0.01em;
+}
+
+.grupo-secao-header i {
+	opacity: 0.75;
+	font-size: 0.85rem;
+}
+
+.grupo-secao-count {
+	margin-left: auto;
+	background: rgba(255, 255, 255, 0.18);
+	color: rgba(255, 255, 255, 0.9);
+	font-size: 0.72rem;
+	padding: 0.15rem 0.55rem;
+	border-radius: 999px;
+	font-weight: 500;
+}
+
+.grupo-secao > .d-flex {
+	border: 1.5px solid #e9ecef;
+	border-top: none;
+	border-radius: 0 0 0.65rem 0.65rem;
+	overflow: hidden;
+	background: #f9fafb;
+	padding: 0.5rem;
+	gap: 0.4rem !important;
+}
+
+@media (max-width: 576px) {
+	.adicionar-btn .btn-text,
+	.editar-btn .btn-text,
+	.excluir-btn .btn-text,
+	.compartilhar-btn .btn-text {
+		display: none;
+	}
+}
+
+.btn-youtube {
+	transition: transform 0.2s;
+}
+
+@media (hover: hover) {
+	.btn-youtube:hover {
+		transform: scale(1.02);
+	}
+}
+
+/* ── Chips de permissão ─────────────────────────────────── */
+.permissao-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	font-size: 0.78rem;
+	font-weight: 600;
+	padding: 0.28rem 0.7rem;
+	border-radius: 999px;
+	letter-spacing: 0.01em;
+}
+
+.permissao-ok {
+	background: #dcfce7;
+	color: #166534;
+}
+
+.permissao-no {
+	background: #fee2e2;
+	color: #991b1b;
+}
+
+/* ── Dot de status ──────────────────────────────────────── */
+.status-dot {
+	display: inline-block;
+	width: 0.55rem;
+	height: 0.55rem;
+	border-radius: 50%;
+	flex-shrink: 0;
+	margin-top: 0.3rem;
+}
+
+.status-dot-ok {
+	background: #16a34a;
+	box-shadow: 0 0 0 2px #dcfce7;
+}
+.status-dot-no {
+	background: #9ca3af;
+	box-shadow: 0 0 0 2px #f3f4f6;
+}
+
+/* ── Desktop: tabelas ficam lado a lado em grid ─────────── */
+@media (min-width: 768px) {
+	.item-card-compacto:hover {
+		transform: translateX(3px);
+	}
+
+	.grupo-secao-header .btn {
+		font-size: 0.78rem;
+		padding: 0.25rem 0.75rem;
+	}
+}

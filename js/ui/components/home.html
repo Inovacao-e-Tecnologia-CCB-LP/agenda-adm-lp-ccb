@@ -1,0 +1,144 @@
+<div class="home">
+	<div class="text-center mb-3 mt-5">
+		<img class="logo" src="img/logo-agenda-lp.png" alt="Agenda Logo" />
+	</div>
+
+	<p class="mb-2 text-muted" style="font-size: 1.05rem">
+		Escolha uma das opções abaixo para continuar:
+	</p>
+
+	<div class="grade-escolha">
+		<button class="btn btn-dark" onclick="navigateTo(showEscolherLocal)">
+			<i class="bi bi-check2-circle"></i>
+			Confirmar presença
+		</button>
+
+		<button class="btn btn-outline-dark" onclick="verInscritos()">
+			<i class="bi bi-people"></i>
+			Visualizar inscrições
+		</button>
+
+		<button class="btn btn-outline-dark" onclick="navigateTo(abrirTelaCalendarioPublico)">
+			<i class="bi bi-calendar3"></i>
+			Visualizar calendário
+		</button>
+	</div>
+
+	<!-- Botão Flutuante de Ajuda -->
+	<div
+		style="
+			position: fixed;
+			bottom: 1.5rem;
+			right: 1.5rem;
+			z-index: 1030;
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+		"
+	>
+		<div
+			class="bg-white shadow px-3 py-2 rounded-3 border fw-semibold small text-dark animate__animated animate__fadeIn"
+		>
+			Precisa de ajuda?
+		</div>
+		<button
+			onclick="abrirModalAjuda()"
+			class="btn btn-dark rounded-circle shadow d-flex align-items-center justify-content-center"
+			style="width: 3.5rem; height: 3.5rem; transition: transform 0.2s"
+		>
+			<i class="bi bi-question-circle fs-3"></i>
+		</button>
+	</div>
+
+	<!-- Modal Ajuda -->
+	<div class="modal fade" id="modalAjuda" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content border-0 shadow">
+				<div class="modal-header bg-dark text-white">
+					<div class="d-flex align-items-center gap-2">
+						<h5 class="modal-title fs-6 mb-0">Ajuda/Suporte</h5>
+					</div>
+					<button
+						type="button"
+						class="btn-close btn-close-white"
+						data-bs-dismiss="modal"
+						aria-label="Close"
+					></button>
+				</div>
+				<div class="modal-body p-4">
+					<p
+						class="text-muted small fw-semibold text-uppercase mb-3 text-center"
+						style="letter-spacing: 0.05em"
+					>
+						Escolha e converse com um responsável
+					</p>
+
+					<div class="d-grid gap-2">
+						<button
+							onclick="abrirWhatsApp('5514988088494')"
+							class="btn btn-outline-dark p-3 text-start d-flex align-items-center gap-3"
+						>
+							<i class="bi bi-whatsapp fs-4 text-success"></i>
+							<span class="fw-semibold">João Erik</span>
+						</button>
+
+						<button
+							onclick="abrirWhatsApp('5514991348270')"
+							class="btn btn-outline-dark p-3 text-start d-flex align-items-center gap-3"
+						>
+							<i class="bi bi-whatsapp fs-4 text-success"></i>
+							<span class="fw-semibold">Leonardo Silva</span>
+						</button>
+
+						<button
+							onclick="abrirWhatsApp('5511932674387')"
+							class="btn btn-outline-dark p-3 text-start d-flex align-items-center gap-3"
+						>
+							<i class="bi bi-whatsapp fs-4 text-success"></i>
+							<span class="fw-semibold">Lucas Oliveira</span>
+						</button>
+
+						<button
+							onclick="abrirWhatsApp('5514981642693')"
+							class="btn btn-outline-dark p-3 text-start d-flex align-items-center gap-3"
+						>
+							<i class="bi bi-whatsapp fs-4 text-success"></i>
+							<span class="fw-semibold">Raul Dangio</span>
+						</button>
+
+						<button
+							onclick="abrirWhatsApp('5514998761501')"
+							class="btn btn-outline-dark p-3 text-start d-flex align-items-center gap-3"
+						>
+							<i class="bi bi-whatsapp fs-4 text-success"></i>
+							<span class="fw-semibold">Tiago Aderbal</span>
+						</button>
+					</div>
+
+					<hr class="my-4" />
+
+					<p
+						class="text-muted small fw-semibold text-uppercase mb-3 text-center"
+						style="letter-spacing: 0.05em"
+					>
+						Prefere ver como funciona?
+					</p>
+
+					<button
+						onclick="
+							window.open(
+								'https://youtu.be/cMVe88Kzz14?list=PLLVUm02rlU60N5JcqeUOPFZ80TgJXzpHw',
+								'_blank', 'noopener,noreferrer'
+							)
+						"
+						class="btn btn-danger w-100 p-3 d-flex align-items-center justify-content-center gap-3 fw-semibold shadow-sm btn-youtube"
+						style="border-radius: 0.75rem; transition: transform 0.2s"
+					>
+						<i class="bi bi-youtube fs-4"></i>
+						Assistir tutoriais no YouTube
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,588 @@
+/* ═══════════════════════════════════════════════════════════
+   ACESSIBILIDADE MOBILE — AGENDA ADM
+   Otimizado para idosos: letras grandes, botões fáceis de
+   tocar, alto contraste, espaçamento generoso.
+   Breakpoints:
+     ≤ 576px  = qualquer celular
+     ≤ 400px  = celular pequeno (ajuste fino)
+═══════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────
+   INSCRITOS — Mobile cards (removido — agora usa accordion
+   igual ao desktop em todas as telas)
+───────────────────────────────────────────────────────── */
+/* Estilos legados dos cards mobile — mantidos mas não usados */
+.inscritos-mobile-wrapper,
+.inscritos-local-section,
+.inscritos-local-header,
+.inscritos-local-icon,
+.inscritos-local-endereco,
+.inscritos-prog-card,
+.inscritos-prog-header,
+.inscritos-prog-titulo,
+.inscritos-prog-subtitulo,
+.inscritos-prog-desc,
+.inscritos-share-btn,
+.inscritos-prog-badge,
+.inscritos-pessoas-lista,
+.inscrito-pessoa-card,
+.inscrito-avatar,
+.inscrito-info,
+.inscrito-nome,
+.inscrito-setor,
+.inscrito-excluir-btn {
+	display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   BASE GLOBAL — aplica em todas as telas
+───────────────────────────────────────────────────────── */
+
+html,
+body {
+	overflow-x: hidden;
+	max-width: 100%;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+.card,
+.item-card {
+	min-width: 0;
+	word-break: break-word;
+}
+
+/* ─────────────────────────────────────────────────────────
+   LOGO
+───────────────────────────────────────────────────────── */
+
+.logo {
+	max-width: 80%;
+}
+
+@media (max-width: 576px) {
+	.logo {
+		max-width: 75%;
+	}
+}
+
+/* ─────────────────────────────────────────────────────────
+   MOBILE ≤ 576px — TAMANHO BASE GRANDE
+───────────────────────────────────────────────────────── */
+
+@media (max-width: 576px) {
+	/* ── Corpo geral ───────────────────────────────────── */
+	body {
+		font-size: 1.05rem; /* base maior para idosos */
+	}
+
+	#conteudo {
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+		padding-bottom: 2.5rem;
+	}
+
+	/* ── Header ────────────────────────────────────────── */
+	header {
+		padding: 0.65rem 0 !important;
+	}
+
+	#titulo {
+		font-size: clamp(1.05rem, 5vw, 1.55rem);
+		font-weight: 500;
+	}
+
+	/* Botão Voltar — toque fácil */
+	#backButton {
+		font-size: 0.95rem;
+		padding: 0.55rem 0.85rem;
+		min-height: 2.75rem;
+		border-radius: 0.5rem;
+	}
+
+	/* Botão Voltar — ocultar literal no modo mobile */
+	@media (max-width: 576px) {
+		#backButton .back-text {
+			display: none;
+		}
+	}
+
+	/* Botão Admin — toque fácil */
+	#adminButton {
+		padding: 0.55rem 0.75rem;
+		font-size: 1rem;
+		min-height: 2.75rem;
+	}
+
+	/* ── Logo ──────────────────────────────────────────── */
+	#conteudo h2 {
+		font-size: 1.15rem;
+		margin-bottom: 1rem !important;
+	}
+
+	/* ── Formulários — inputs grandes ──────────────────── */
+	.form-control {
+		font-size: 1.1rem;
+		padding: 0.75rem 0.9rem;
+		min-height: 3.1rem;
+	}
+
+	.form-label {
+		font-size: 1rem;
+		font-weight: 600;
+		margin-bottom: 0.4rem;
+	}
+
+	.form-text {
+		font-size: 0.88rem;
+	}
+
+	.form-select {
+		font-size: 1.05rem;
+		padding: 0.7rem 2.5rem 0.7rem 0.9rem;
+		min-height: 3.1rem;
+	}
+
+	.form-check-input {
+		width: 1.4rem;
+		height: 1.4rem;
+		margin-top: 0.15rem;
+	}
+
+	.form-check-label {
+		font-size: 1rem;
+		padding-left: 0.4rem;
+		line-height: 1.5;
+	}
+
+	/* ── Botões — área de toque mínima 48px ─────────────── */
+	.btn {
+		font-size: 1rem;
+		min-height: 3rem;
+		padding: 0.7rem 1.1rem;
+		border-radius: 0.6rem;
+	}
+
+	.btn-sm {
+		font-size: 0.92rem;
+		min-height: 2.6rem;
+		padding: 0.5rem 0.85rem;
+	}
+
+	.btn-lg {
+		font-size: 1.15rem;
+		min-height: 3.5rem;
+		padding: 0.9rem 1.35rem;
+		border-radius: 0.7rem;
+	}
+
+	/* Botões de ação lado a lado viram coluna empilhada */
+	.d-flex.gap-2.justify-content-center.justify-content-md-end {
+		flex-direction: column;
+	}
+	.d-flex.gap-2.justify-content-center.justify-content-md-end .btn {
+		width: 100%;
+	}
+
+	/* ── Modais ─────────────────────────────────────────── */
+	.modal-dialog {
+		margin: 0.5rem;
+	}
+
+	.modal-dialog-centered {
+		min-height: calc(100% - 1rem);
+	}
+
+	.modal-body {
+		padding: 1.25rem;
+		font-size: 1.05rem;
+	}
+
+	.modal-header {
+		padding: 1rem 1.25rem;
+	}
+
+	.modal-title {
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+
+	.modal-footer {
+		padding: 0.9rem 1.25rem;
+		gap: 0.65rem;
+	}
+
+	.modal-footer .btn {
+		flex: 1;
+		min-width: 0;
+		font-size: 1rem;
+		min-height: 3rem;
+	}
+
+	/* ── Cards gerais ───────────────────────────────────── */
+	.card-body {
+		padding: 1.1rem;
+	}
+
+	.card-header {
+		padding: 0.85rem 1.1rem;
+		font-size: 1rem;
+	}
+
+	/* item-card */
+	.item-card-header {
+		padding: 0.9rem 1.1rem;
+	}
+
+	.item-card-titulo {
+		font-size: 1.05rem;
+	}
+
+	.item-card-body {
+		padding: 1rem 1.1rem;
+	}
+
+	.card-info-row {
+		font-size: 0.97rem;
+		margin-bottom: 0.65rem;
+		gap: 0.6rem;
+	}
+
+	.card-info-row > i {
+		font-size: 0.95rem;
+		margin-top: 0.1rem;
+	}
+
+	.item-card-actions {
+		padding: 0.75rem 1.1rem;
+		gap: 0.6rem;
+	}
+
+	.item-card-actions .btn {
+		font-size: 0.97rem;
+		padding: 0.6rem 0.75rem;
+		min-height: 2.9rem;
+	}
+
+	.item-card-badge {
+		font-size: 0.8rem;
+		padding: 0.25rem 0.75rem;
+	}
+
+	/* ── Grupo seção ────────────────────────────────────── */
+	.grupo-secao-header {
+		padding: 0.75rem 1rem;
+		font-size: 0.97rem;
+	}
+
+	.grupo-secao-count {
+		font-size: 0.82rem;
+		padding: 0.18rem 0.6rem;
+	}
+
+	/* ── Badges e chips ─────────────────────────────────── */
+	.badge-setor {
+		font-size: 0.85rem;
+		padding: 0.3rem 0.75rem;
+	}
+
+	.permissao-chip {
+		font-size: 0.88rem;
+		padding: 0.35rem 0.8rem;
+	}
+
+	/* ── Link mapa ──────────────────────────────────────── */
+	.link-mapa {
+		font-size: 1rem;
+		padding: 0.7rem 0.9rem;
+		margin-left: 0;
+	}
+
+	/* ── Accordion / Inscritos ──────────────────────────── */
+	.accordion-button {
+		font-size: 1.05rem;
+		font-weight: 700;
+		padding: 1.1rem 1.1rem;
+		min-height: 3.2rem;
+	}
+
+	.accordion-body {
+		padding: 0.875rem;
+	}
+
+	.list-group-item {
+		padding: 1rem 1.1rem;
+		font-size: 1rem;
+	}
+
+	/* Nome do inscrito */
+	.list-group-item .fw-semibold {
+		font-size: 1.05rem;
+	}
+
+	/* Setor do inscrito */
+	.list-group-item .text-muted.small {
+		font-size: 0.92rem;
+	}
+
+	/* Botão excluir inscrito */
+	.list-group-item .btn-sm {
+		min-height: 2.8rem;
+		min-width: 2.8rem;
+		padding: 0.5rem;
+		font-size: 1rem;
+	}
+
+	/* ── Grade de escolha (locais, datas, setores) ─── */
+	.grade-escolha {
+		gap: 0.85rem;
+		max-width: 100%;
+		width: 100%;
+	}
+
+	.grade-escolha .btn {
+		padding: 1.1rem 1.25rem;
+		font-size: 1.1rem;
+		min-height: 4rem;
+		border-radius: 0.75rem;
+		gap: 0.85rem;
+		border-width: 2px;
+	}
+
+	.grade-escolha .btn i {
+		font-size: 1.5rem;
+	}
+
+	/* ── Admin grid — 2 colunas em celular grande ───────── */
+	.admin-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.9rem;
+		max-width: 100%;
+	}
+
+	/* Admin card: coluna vertical em telas médias */
+	.admin-card .card-body {
+		padding: 1.6rem 0.85rem;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 0.6rem;
+	}
+
+	.admin-card .bi {
+		font-size: 2.2rem !important;
+		flex-shrink: 0;
+	}
+
+	.admin-card h5 {
+		font-size: 1rem;
+		margin: 0;
+	}
+
+	.admin-card-icon-wrap {
+		width: 3.4rem;
+		height: 3.4rem;
+		border-radius: 0.85rem;
+		margin: 0 auto 0.25rem;
+	}
+
+	.admin-card-icon-wrap .bi {
+		font-size: 1.7rem !important;
+	}
+
+	.admin-card-desc {
+		font-size: 0.78rem;
+		text-align: center;
+	}
+
+	/* ── Calendário ─────────────────────────────────────── */
+	.cal-grid-wrapper {
+		padding: 2px;
+	}
+	.cal-grid {
+		gap: 2px;
+	}
+
+	.cal-cell {
+		padding: 0.2rem 0.1rem 0.14rem;
+		border-radius: 0.25rem;
+	}
+
+	.cal-num {
+		font-size: 0.72rem;
+	}
+
+	.cal-cell.cal-hoje .cal-num {
+		width: 1.35rem;
+		height: 1.35rem;
+		font-size: 0.7rem;
+	}
+
+	.cal-ev-pill {
+		width: 0.44rem;
+		height: 0.44rem;
+	}
+	.cal-ev-mais {
+		font-size: 0.52rem;
+	}
+
+	.cal-header-dia {
+		font-size: 0.6rem;
+		padding: 0.4rem 0.05rem;
+		letter-spacing: 0;
+	}
+
+	.cal-mes-nome {
+		font-size: 0.92rem;
+	}
+	.cal-nav {
+		padding: 0.6rem 0.75rem;
+	}
+
+	/* ── Alerts e feedback ──────────────────────────────── */
+	.alert {
+		font-size: 1rem;
+		padding: 0.9rem 1.1rem;
+	}
+
+	.form-text.text-danger,
+	.invalid-feedback,
+	.text-danger {
+		font-size: 0.92rem;
+	}
+}
+
+/* ─────────────────────────────────────────────────────────
+   MOBILE PEQUENO ≤ 400px — ajuste fino
+───────────────────────────────────────────────────────── */
+
+@media (max-width: 400px) {
+	/* Admin: 1 coluna em telas muito pequenas */
+	.admin-grid {
+		grid-template-columns: 1fr;
+		gap: 0.7rem;
+	}
+
+	/* Admin card: linha horizontal compacta */
+	.admin-card .card-body {
+		flex-direction: row !important;
+		text-align: left !important;
+		padding: 1rem 1rem !important;
+		gap: 0.85rem !important;
+		align-items: center !important;
+	}
+
+	.admin-card-icon-wrap {
+		width: 3rem !important;
+		height: 3rem !important;
+		border-radius: 0.7rem !important;
+		margin: 0 !important;
+		flex-shrink: 0 !important;
+	}
+
+	.admin-card-icon-wrap .bi {
+		font-size: 1.45rem !important;
+	}
+
+	.admin-card h5 {
+		font-size: 1rem !important;
+		text-align: left !important;
+		margin-bottom: 0.05rem !important;
+	}
+
+	.admin-card-desc {
+		font-size: 0.78rem !important;
+		text-align: left !important;
+	}
+
+	/* Calendário: ainda mais compacto */
+	.cal-grid-wrapper {
+		padding: 1px;
+	}
+	.cal-grid {
+		gap: 1px;
+	}
+	.cal-num {
+		font-size: 0.62rem;
+	}
+	.cal-cell.cal-hoje .cal-num {
+		width: 1.15rem;
+		height: 1.15rem;
+		font-size: 0.6rem;
+	}
+	.cal-header-dia {
+		font-size: 0.5rem;
+		padding: 0.32rem 0.02rem;
+	}
+	.cal-mes-nome {
+		font-size: 0.84rem;
+	}
+
+	/* Grade de escolha */
+	.grade-escolha .btn {
+		padding: 1rem 1rem;
+		font-size: 1.05rem;
+		min-height: 3.75rem;
+	}
+
+	.grade-escolha .btn i {
+		font-size: 1.4rem;
+	}
+
+	/* Botões */
+	.btn {
+		font-size: 0.97rem;
+		min-height: 2.9rem;
+	}
+	.btn-lg {
+		font-size: 1.1rem;
+		min-height: 3.3rem;
+	}
+
+	/* List items inscritos */
+	.list-group-item {
+		padding: 0.9rem 0.9rem;
+	}
+	.list-group-item .fw-semibold {
+		font-size: 1rem;
+	}
+}
+
+/* ─────────────────────────────────────────────────────────
+   MODAL — large no mobile para modais do admin
+───────────────────────────────────────────────────────── */
+
+@media (max-width: 1000px) {
+	#modalAdmin .modal-dialog {
+		margin-top: 10vh;
+		align-items: flex-start;
+	}
+}
+
+/* ─────────────────────────────────────────────────────────
+   ADMIN CARD — ícone colorido e descrição (todas as telas)
+───────────────────────────────────────────────────────── */
+
+.admin-card-icon-wrap {
+	width: 4rem;
+	height: 4rem;
+	border-radius: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto 0.5rem;
+}
+
+.admin-card-icon-wrap .bi {
+	font-size: 2rem !important;
+}
+
+.admin-card-desc {
+	font-size: 0.78rem;
+	color: #6c757d;
+	margin: 0.1rem 0 0;
+	line-height: 1.3;
+}
