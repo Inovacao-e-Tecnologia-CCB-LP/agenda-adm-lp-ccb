@@ -789,7 +789,7 @@ function _abrirModalAgendamentos(agendamentos = null) {
 		inputData.setAttribute('min', hojeStr);
 	} else {
 		// ===== NOVO =====
-		document.getElementById('progModalTitulo').innerText = 'Nova Agendamento';
+		document.getElementById('progModalTitulo').innerText = 'Novo Agendamento';
 
 		inputData.value = hojeStr;
 		inputData.setAttribute('min', hojeStr);
