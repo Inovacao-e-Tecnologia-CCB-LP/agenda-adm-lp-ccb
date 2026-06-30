@@ -59,15 +59,9 @@ img {
    LOGO
 ───────────────────────────────────────────────────────── */
 
-.logo {
-	max-width: 80%;
-}
-
-@media (max-width: 576px) {
 	.logo {
-		max-width: 75%;
+		width: 300px;
 	}
-}
 
 /* ─────────────────────────────────────────────────────────
    MOBILE ≤ 576px — TAMANHO BASE GRANDE

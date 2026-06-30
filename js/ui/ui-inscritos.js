@@ -59,43 +59,43 @@ function renderAccordionInscritos(grupos) {
 			const p = agendamentosMap[pid];
 			const setorNome = setoresMap[p.setor_id]?.nome || 'Setor';
 
-			const obsHTML = p.observacoes
-				? `<div class="mt-1">
-					<small class="text-primary fw-semibold">
-						<strong>Observações: </strong>${p.observacoes}
-					</small>
-				</div>`
-				: '';
+const obsHTML = p.observacoes
+	? `<div class="mt-1">
+		<small class="d-flex align-items-center gap-1 opacity-75">
+			<i class="bi bi-chat-left-text me-1"></i>${p.observacoes}
+		</small>
+	</div>`
+	: '';
 
-			html += `
-        <div class="card mb-3 border-dark">
-          <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center gap-2 py-3">
-            <div class="text-start">
-			<span>
-				<strong>Data: ${formatarData(p.data)} (${p.descricao})</strong>
-				<div class="mt-1">
-					<small class="text-muted">
-						<strong>Horário: </strong>${formatarHorario(p.horario)}
-					</small>
-				</div>
-				<div class="mt-1">
-					<small class="text-muted">
-						<strong>Setor: </strong>${setorNome}
-					</small>
-				</div>
-				${obsHTML}
-			</span>
-            </div>
-
-            <button class="btn btn-sm btn-success flex-shrink-0"
-              onclick="compartilhar(${pid})">
-              <i class="bi bi-whatsapp"></i>
-              <span class="d-none d-md-inline ms-1">Compartilhar</span>
-            </button>
+html += `
+  <div class="card mb-3 border-0 shadow-sm">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center gap-2 py-3">
+      <div class="text-start">
+        <span>
+          <strong>${formatarData(p.data)} (${p.descricao})</strong>
+          <div class="mt-1">
+            <small class="d-flex align-items-center gap-1 opacity-75">
+              <i class="bi bi-clock-fill me-1"></i>${formatarHorario(p.horario)}
+            </small>
           </div>
+          <div class="mt-1">
+            <small class="d-flex align-items-center gap-1 opacity-75">
+              <i class="bi bi-diagram-3 me-1"></i>${setorNome}
+            </small>
+          </div>
+          ${obsHTML}
+        </span>
+      </div>
 
-          <ul class="list-group list-group-flush">
-      `;
+      <button class="btn btn-sm btn-success flex-shrink-0"
+        onclick="compartilhar(${pid})">
+        <i class="bi bi-whatsapp"></i>
+        <span class="d-none d-md-inline ms-1">Compartilhar</span>
+      </button>
+    </div>
+
+    <ul class="list-group list-group-flush">
+`;
 
 			inscritosLista.forEach((i) => {
 				const auth = localStorageService.buscarAutorizacao(i.id);
@@ -104,7 +104,7 @@ function renderAccordionInscritos(grupos) {
 	<li class="list-group-item d-flex justify-content-between align-items-center gap-2 py-3">
 		<span class="d-flex flex-column align-items-start">
 			<span class="fw-semibold">${i.nome}</span>
-			<span class="text-muted small">Confirmada em: ${formatarData(i.data)}</span>
+			<span class="text-muted small">Confirmação: ${formatarData(i.data)}</span>
 		</span>
 
 		${
@@ -190,6 +190,48 @@ async function showInscritos() {
       </div>`;
 	} finally {
 		liberarUI();
+	}
+}
+
+/* =========================
+   EXCLUIR INSCRIÇÕES
+========================= */
+
+async function excluirInscricao(id, btn) {
+	const auth = localStorageService.buscarAutorizacao(id);
+
+	if (!auth) {
+		abrirModalAviso('Erro', 'Você não tem permissão para excluir esta inscrição');
+		return;
+	}
+
+	const confirmou = await abrirModalConfirmacao(
+		'Deseja realmente excluir esta inscrição?',
+		'Excluir',
+	);
+	if (!confirmou) return;
+
+	const originalHTML = btn.innerHTML;
+	const originalClass = btn.className;
+
+	btn.disabled = true;
+	btn.className = 'btn btn-sm btn-danger';
+	btn.innerHTML = '<span class="spinner-border spinner-border-sm text-light"></span>';
+
+	try {
+		const r = await inscricoesService.excluir(id, auth.token);
+
+		if (!r?.success) throw r;
+
+		localStorageService.removerAutorizacao(id);
+		abrirModalAviso('Sucesso', 'Inscrição excluída com sucesso');
+		showInscritos();
+	} catch (e) {
+		console.error(e);
+		abrirModalAviso('Erro', 'Erro ao excluir inscrição');
+	} finally {
+		btn.disabled = false;
+		btn.innerHTML = originalHTML;
 	}
 }
 

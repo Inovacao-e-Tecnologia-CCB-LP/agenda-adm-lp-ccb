@@ -530,34 +530,41 @@ function _abrirDetalhesDia(dia, eventosJson) {
 			const cor = _getCorLocal(p.local_id);
 
 			// ===== INSCRIÇÕES =====
-			const inscricoesHtml = _calModoSomenteLeitura
-				? inscricoes.length
-					? `
+const inscricoesHtml = _calModoSomenteLeitura
+	? inscricoes.length
+		? `
 <div class="cal-det-row align-items-start mt-2" style="color:${cor.text}; border-top:1px solid ${cor.border}55;">
 	<div class="w-100 mt-2">
 		<i class="bi bi-people-fill mt-1" style="color:${cor.dot}"></i>
-		<span class="fw-semibold">Inscrições</span>
+		<span class="fw-bold">Inscrições</span>
 		<ul class="list-unstyled mb-0">
 			${inscricoes
-				.map(
-					(i) => `
-<li class="d-flex justify-content-between py-1">
-	<span> • ${i.nome} | Confirmada em: ${formatarData(i.data)}</span>
+				.map((i) => {
+					return `
+<li class="d-flex justify-content-between align-items-center py-1">
+	<div class="d-flex flex-column">
+		<span class="cal-inscricao-texto">• ${i.nome}</span>
+	</div>
+
+	<span class="badge rounded-pill" 
+	      style="background:${cor.dot}22; color:${cor.dot}; font-size:11px;">
+		${formatarData(i.data)}
+	</span>
 </li>
-`,
-				)
+`;
+				})
 				.join('')}
 		</ul>
 	</div>
 </div>
 `
-					: `
+		: `
 <div class="cal-det-row">
 	<i class="bi bi-people" style="color:${cor.dot}"></i>
 	<span class="text-muted">Nenhuma inscrição</span>
 </div>
 `
-				: '';
+	: '';
 
 			return `
       <div class="cal-det-card" style="background:${cor.bgCard}; border:1.5px solid ${cor.border};">
@@ -634,7 +641,7 @@ function _abrirDetalhesDia(dia, eventosJson) {
   <div class="text-center mt-3">
     <button class="btn btn-dark btn-sm w-100 mt-2"
       onclick="_novoAgendamentoDoDetalhe(${dia})">
-      <i class="bi bi-plus-circle"></i>
+      <i class="bi bi-plus-lg"></i>
       Novo Agendamento
     </button>
   </div>`

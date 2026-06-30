@@ -27,7 +27,7 @@ async function showEscolherLocal() {
           </strong>
 
 		<div class="mt-1">
-			<small class="text-primary">
+			<small class="d-flex align-items-center gap-1 opacity-75">
 				${l.endereco || 'Endereço não informado'}
 			</small>
 		</div>
@@ -60,7 +60,7 @@ function showEscolherData() {
 	if (agendamentosFiltrados.length === 0) {
 		conteudo.innerHTML = `
 			<div class="alert alert-secondary text-center">
-				Nenhuma data disponível para este local
+				Nenhum agendamento para este local
 			</div>
 		`;
 		return;
@@ -74,37 +74,34 @@ function showEscolherData() {
 
 	agendamentosFiltrados.forEach((p) => {
 		const btn = document.createElement('button');
-		btn.className = 'btn btn-outline-dark';
+		btn.className = 'btn btn-outline-dark text-start';
 
 		const setorNome = setoresMap[p.setor_id]?.nome || 'Setor';
-		const icone = 'bi bi-calendar-event';
 
-		// Observação (só aparece se existir)
 		const obsHTML = p.observacoes
-			? `<div class="mt-1">
-					<small class="text-primary fw-semibold">
-						Observações: ${p.observacoes}
-					</small>
-				</div>`
+			? `<small class="d-flex align-items-center gap-1 opacity-75 fw-semibold">
+					<i class="bi bi-chat-left-text fs-6"></i>${p.observacoes}
+				</small>`
 			: '';
 
-		btn.innerHTML = `
-			<i class="${icone}"></i>
-			<span>
-				<strong>Data: ${formatarData(p.data)} (${p.descricao})</strong>
-				<div class="mt-1">
-					<small class="text-muted">
-						<strong>Horário: </strong>${formatarHorario(p.horario)}
-					</small>
-				</div>
-				<div class="mt-1">
-					<small class="text-muted">
-						<strong>Setor: </strong>${setorNome}
-					</small>
-				</div>
+btn.innerHTML = `
+	<div class="d-flex align-items-center gap-2">
+		<i class="bi bi-calendar-event fs-4"></i>
+		<div class="w-100">
+			<strong>${formatarData(p.data)} (${p.descricao})</strong>
+
+			<div class="d-flex flex-column flex-md-row flex-wrap gap-1 gap-md-3 mt-2">
+				<small class="d-flex align-items-center gap-1 opacity-75">
+					<i class="bi bi-clock-fill fs-6"></i>${formatarHorario(p.horario)}
+				</small>
+				<small class="d-flex align-items-center gap-1 opacity-75">
+					<i class="bi bi-diagram-3 fs-6"></i>${setorNome}
+				</small>
 				${obsHTML}
-			</span>
-		`;
+			</div>
+		</div>
+	</div>
+`;
 
 		btn.onclick = () => selecionarData(p);
 		g.appendChild(btn);
@@ -185,10 +182,15 @@ async function salvarInscricao(btnEl) {
 	nome = nomeProcessado;
 	localStorageService.salvarNome(nome);
 
+	const btnVoltarHome = document.getElementById('btnVoltarHome');
 	const originalHTML = btn ? btn.innerHTML : '';
 	if (btn) {
 		btn.disabled = true;
 		btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
+	}
+
+		if (btnVoltarHome) {
+		btnVoltarHome.disabled = true;
 	}
 
 	const payload = {
@@ -219,43 +221,5 @@ async function salvarInscricao(btnEl) {
 			btn.disabled = false;
 			btn.innerHTML = originalHTML;
 		}
-	}
-}
-
-async function excluirInscricao(id, btn) {
-	const auth = localStorageService.buscarAutorizacao(id);
-
-	if (!auth) {
-		abrirModalAviso('Erro', 'Você não tem permissão para excluir esta inscrição');
-		return;
-	}
-
-	const confirmou = await abrirModalConfirmacao(
-		'Deseja realmente excluir esta inscrição?',
-		'Excluir',
-	);
-	if (!confirmou) return;
-
-	const originalHTML = btn.innerHTML;
-	const originalClass = btn.className;
-
-	btn.disabled = true;
-	btn.className = 'btn btn-sm btn-danger';
-	btn.innerHTML = '<span class="spinner-border spinner-border-sm text-light"></span>';
-
-	try {
-		const r = await inscricoesService.excluir(id, auth.token);
-
-		if (!r?.success) throw r;
-
-		localStorageService.removerAutorizacao(id);
-		abrirModalAviso('Sucesso', 'Inscrição excluída com sucesso');
-		showInscritos();
-	} catch (e) {
-		console.error(e);
-		abrirModalAviso('Erro', 'Erro ao excluir inscrição');
-	} finally {
-		btn.disabled = false;
-		btn.innerHTML = originalHTML;
 	}
 }

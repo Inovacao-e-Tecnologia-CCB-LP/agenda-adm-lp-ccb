@@ -158,6 +158,35 @@ header .container {
 	}
 }
 
+
+/* ===========================
+   LOGO
+=========================== */
+.logo {
+	width: 350px;
+	max-width: 75vw;
+}
+
+@media (max-width: 576px) {
+	.logo {
+		width: 300px;
+	}
+}
+
+/* ===========================
+   HOME PAGE MOBILE
+=========================== */
+@media (max-width: 576px) {
+	.logo {
+		width: 300px;
+	}
+
+	#conteudo h2 {
+		font-size: 1rem;
+		margin-bottom: 1rem !important;
+	}
+}
+
 /* ===========================
    MAIN CONTENT
 =========================== */
@@ -1526,6 +1555,11 @@ header .container {
 	.cal-mes-nome {
 		font-size: 0.82rem;
 	}
+}
+
+.cal-inscricao-texto {
+	color: #343a40;
+	font-weight: 400;
 }
 
 /* ═══════════════════════════════════════════════════════════
