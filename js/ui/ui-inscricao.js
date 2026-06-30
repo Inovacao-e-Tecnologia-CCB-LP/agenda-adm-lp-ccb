@@ -84,7 +84,7 @@ function showEscolherData() {
 				</small>`
 			: '';
 
-btn.innerHTML = `
+		btn.innerHTML = `
 	<div class="d-flex align-items-center gap-2">
 		<i class="bi bi-calendar-event fs-4"></i>
 		<div class="w-100">
@@ -189,7 +189,7 @@ async function salvarInscricao(btnEl) {
 		btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
 	}
 
-		if (btnVoltarHome) {
+	if (btnVoltarHome) {
 		btnVoltarHome.disabled = true;
 	}
 

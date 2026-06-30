@@ -530,9 +530,9 @@ function _abrirDetalhesDia(dia, eventosJson) {
 			const cor = _getCorLocal(p.local_id);
 
 			// ===== INSCRIÇÕES =====
-const inscricoesHtml = _calModoSomenteLeitura
-	? inscricoes.length
-		? `
+			const inscricoesHtml = _calModoSomenteLeitura
+				? inscricoes.length
+					? `
 <div class="cal-det-row align-items-start mt-2" style="color:${cor.text}; border-top:1px solid ${cor.border}55;">
 	<div class="w-100 mt-2">
 		<i class="bi bi-people-fill mt-1" style="color:${cor.dot}"></i>
@@ -558,13 +558,13 @@ const inscricoesHtml = _calModoSomenteLeitura
 	</div>
 </div>
 `
-		: `
+					: `
 <div class="cal-det-row">
 	<i class="bi bi-people" style="color:${cor.dot}"></i>
 	<span class="text-muted">Nenhuma inscrição</span>
 </div>
 `
-	: '';
+				: '';
 
 			return `
       <div class="cal-det-card" style="background:${cor.bgCard}; border:1.5px solid ${cor.border};">

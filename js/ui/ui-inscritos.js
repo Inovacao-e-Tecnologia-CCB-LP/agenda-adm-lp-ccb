@@ -59,15 +59,15 @@ function renderAccordionInscritos(grupos) {
 			const p = agendamentosMap[pid];
 			const setorNome = setoresMap[p.setor_id]?.nome || 'Setor';
 
-const obsHTML = p.observacoes
-	? `<div class="mt-1">
+			const obsHTML = p.observacoes
+				? `<div class="mt-1">
 		<small class="d-flex align-items-center gap-1 opacity-75">
 			<i class="bi bi-chat-left-text me-1"></i>${p.observacoes}
 		</small>
 	</div>`
-	: '';
+				: '';
 
-html += `
+			html += `
   <div class="card mb-3 border-0 shadow-sm">
     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center gap-2 py-3">
       <div class="text-start">
