@@ -150,7 +150,7 @@ async function abrirTelaCalendarioPublico() {
 	setTitle('Calendário');
 	conteudo.innerHTML = Ui.PainelAgendamentos();
 	_calModoSomenteLeitura = true;
-	await carregarAgendamentos(true);
+	await carregarAgendamentos(false);
 	const btnNova = document.getElementById('novoAgendamentoBtn');
 	if (btnNova) btnNova.remove();
 }
