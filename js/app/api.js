@@ -30,10 +30,10 @@ class AppScriptApi {
 		return await fetch(`${this.url}?action=view&entity=${entity}`).then((r) => r.json());
 	}
 
-	async update(entity, updatedData, password) {
+	async update(entity, updatedData, password = null, delete_token = null) {
 		return await fetch(`${this.url}?action=update&entity=${entity}`, {
 			method: 'POST',
-			body: JSON.stringify({ ...updatedData, password }),
+			body: JSON.stringify({ ...updatedData, password, delete_token }),
 		}).then((r) => r.json());
 	}
 

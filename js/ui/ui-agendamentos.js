@@ -141,7 +141,7 @@ function _getCorLocal(localId) {
 ========================= */
 async function abrirTelaAgendamentos() {
 	_calModoSomenteLeitura = false;
-	setTitle('Agendamentos');
+	setTitle('Agendamento de Locais');
 	conteudo.innerHTML = Ui.PainelAgendamentos();
 	carregarAgendamentos(true);
 }
@@ -169,9 +169,7 @@ async function carregarAgendamentos(firstTime = false) {
 
 		if (agendamentos?.error) throw new Error(agendamentos.error);
 
-		if (_calModoSomenteLeitura) {
-			dataStore.inscricoes = await inscricoesService.listar();
-		}
+
 
 		agendamentos = agendamentos || [];
 		dataStore.agendamentos = agendamentos;
@@ -480,16 +478,17 @@ function _calIrPara(idx) {
 function _novoAgendamentoDoCalendario(dia) {
 	const { ano, mes } = _calMeses[_calIdx];
 
-	// Monta data no formato yyyy-MM-dd
-	const dataSelecionada = new Date(ano, mes, dia);
-	const dataStr = dataSelecionada.toISOString().split('T')[0];
+	const yyyy = ano;
+	const mm = String(mes + 1).padStart(2, '0');
+	const dd = String(dia).padStart(2, '0');
+	const dataStr = `${yyyy}-${mm}-${dd}`;
 
 	_abrirModalAgendamentos(); // abre como NOVO
 
 	// Pequeno delay para garantir que modal já abriu
 	setTimeout(() => {
 		const inputData = document.getElementById('progData');
-		inputData.value = dataStr;
+		if (inputData) inputData.value = dataStr;
 		_atualizarDiaSemanaAgendamento();
 	}, 50);
 }
@@ -522,49 +521,11 @@ function _abrirDetalhesDia(dia, eventosJson) {
 
 	const cards = eventos
 		.map((p) => {
-			const inscricoes = _calModoSomenteLeitura ? _getInscricoesPorAgendamento(p.id) : [];
-
 			const local = _getLocalById(p.local_id);
 			const setorObj = _getSetorById(p.setor_id);
 			const setor = setorObj?.nome || '-';
 			const cor = _getCorLocal(p.local_id);
-
-			// ===== INSCRIÇÕES =====
-			const inscricoesHtml = _calModoSomenteLeitura
-				? inscricoes.length
-					? `
-<div class="cal-det-row align-items-start mt-2" style="color:${cor.text}; border-top:1px solid ${cor.border}55;">
-	<div class="w-100 mt-2">
-		<i class="bi bi-people-fill mt-1" style="color:${cor.dot}"></i>
-		<span class="fw-bold">Inscrições</span>
-		<ul class="list-unstyled mb-0">
-			${inscricoes
-				.map((i) => {
-					return `
-<li class="d-flex justify-content-between align-items-center py-1">
-	<div class="d-flex flex-column">
-		<span class="cal-inscricao-texto">• ${i.nome}</span>
-	</div>
-
-	<span class="badge rounded-pill" 
-	      style="background:${cor.dot}22; color:${cor.dot}; font-size:11px;">
-		${formatarData(i.data)}
-	</span>
-</li>
-`;
-				})
-				.join('')}
-		</ul>
-	</div>
-</div>
-`
-					: `
-<div class="cal-det-row">
-	<i class="bi bi-people" style="color:${cor.dot}"></i>
-	<span class="text-muted">Nenhuma inscrição</span>
-</div>
-`
-				: '';
+			const podeEditarOuExcluir = !_calModoSomenteLeitura && (window.adminAuth?.authenticated || !!localStorageService.buscarAutorizacaoAgendamento(p.id));
 
 			return `
       <div class="cal-det-card" style="background:${cor.bgCard}; border:1.5px solid ${cor.border};">
@@ -611,13 +572,10 @@ function _abrirDetalhesDia(dia, eventosJson) {
 					: ''
 			}
 
-          <!-- INSCRIÇÕES -->
-          ${inscricoesHtml}
-
         </div>
 
         ${
-			!_calModoSomenteLeitura
+			podeEditarOuExcluir
 				? `
         <button class="btn btn-outline-primary btn-sm w-100 mt-2"
           onclick="_editarDoCalendario(${p.id})">
@@ -831,9 +789,29 @@ async function salvarAgendamento() {
 		let r;
 
 		if (payload.id) {
-			r = await agendamentosService.editar(payload, senhaDigitada, signal);
+			const isAdmin = window.adminAuth?.authenticated;
+			const password = isAdmin ? (window.adminAuth.token || senhaDigitada) : null;
+			const auth = isAdmin ? null : localStorageService.buscarAutorizacaoAgendamento(payload.id);
+			const delete_token = auth ? auth.token : null;
+
+			if (!isAdmin && !delete_token) {
+				mostrarErroCampo('erroValidacaoCamposAgendamento', 'Você não tem permissão para editar este agendamento');
+				return;
+			}
+
+			r = await agendamentosService.editar(payload, password, delete_token);
 		} else {
-			r = await agendamentosService.criar(payload, senhaDigitada, signal);
+			const isAdmin = window.adminAuth?.authenticated;
+			const password = isAdmin ? (window.adminAuth.token || senhaDigitada) : null;
+
+			r = await agendamentosService.criar(payload, password);
+
+			const id = r?.id || r?.data?.id || r?.item?.id;
+			const token = r?.delete_token || r?.token || r?.data?.delete_token || r?.data?.token;
+
+			if (id && token) {
+				localStorageService.salvarAutorizacaoAgendamento(id, token);
+			}
 		}
 
 		if (signal.aborted) return;
@@ -866,6 +844,14 @@ async function salvarAgendamento() {
    EXCLUIR
 ========================= */
 function excluirAgendamento(id, btnTrash) {
+	const isAdmin = window.adminAuth?.authenticated;
+	const auth = localStorageService.buscarAutorizacaoAgendamento(id);
+
+	if (!isAdmin && !auth) {
+		abrirModalAviso('Erro', 'Você não tem permissão para excluir este agendamento');
+		return;
+	}
+
 	document.getElementById('confirmTitle').innerText = 'Excluir Agendamento';
 	document.getElementById('confirmMessage').innerText =
 		'Deseja realmente excluir este agendamento?';
@@ -877,13 +863,22 @@ function excluirAgendamento(id, btnTrash) {
 		_travarModal('confirmModal');
 		try {
 			btnOk.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Excluindo`;
-			const signal = _getModalSignal('confirmModal');
-			const r = await agendamentosService.excluir(id, senhaDigitada, signal);
-			if (signal.aborted) return;
+			let r;
+			if (isAdmin) {
+				r = await agendamentosService.excluirComSenha(id, senhaDigitada);
+			} else {
+				r = await agendamentosService.excluirComToken(id, auth.token);
+			}
+
 			if (r?.error) {
 				abrirModalAviso('Aviso', r.error);
 				return;
 			}
+
+			if (!isAdmin) {
+				localStorageService.removerAutorizacaoAgendamento(id);
+			}
+
 			abrirModalAviso('Sucesso', 'Agendamento excluído com sucesso');
 			await carregarAgendamentos();
 		} catch (err) {

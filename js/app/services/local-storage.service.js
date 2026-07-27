@@ -1,11 +1,12 @@
 class LocalStorageService {
 	LS_KEY = 'inscricoes_autorizadas';
+	LS_AGENDAMENTOS_KEY = 'agendamentos_autorizados';
 	LS_NOME_KEY = 'agenda_ultimo_nome';
 
 	buscarAutorizacao(id) {
 		try {
 			const lista = JSON.parse(localStorage.getItem(this.LS_KEY)) || [];
-			return lista.find((item) => item.id === id) || null;
+			return lista.find((item) => String(item.id) === String(id)) || null;
 		} catch (e) {
 			console.error('Erro ao ler autorizacoes do localStorage:', e);
 			return null;
@@ -15,7 +16,7 @@ class LocalStorageService {
 	salvarAutorizacao(id, token) {
 		try {
 			const lista = JSON.parse(localStorage.getItem(this.LS_KEY)) || [];
-			const novaLista = lista.filter((item) => item.id !== id);
+			const novaLista = lista.filter((item) => String(item.id) !== String(id));
 			novaLista.push({ id, token });
 			localStorage.setItem(this.LS_KEY, JSON.stringify(novaLista));
 		} catch (e) {
@@ -26,10 +27,43 @@ class LocalStorageService {
 	removerAutorizacao(id) {
 		try {
 			let lista = JSON.parse(localStorage.getItem(this.LS_KEY)) || [];
-			lista = lista.filter((item) => item.id !== id);
+			lista = lista.filter((item) => String(item.id) !== String(id));
 			localStorage.setItem(this.LS_KEY, JSON.stringify(lista));
 		} catch (e) {
 			console.error('Erro ao remover autorizacao:', e);
+		}
+	}
+
+	// ── Agendamentos ──────────────────────────────────────────────────────────
+
+	buscarAutorizacaoAgendamento(id) {
+		try {
+			const lista = JSON.parse(localStorage.getItem(this.LS_AGENDAMENTOS_KEY)) || [];
+			return lista.find((item) => String(item.id) === String(id)) || null;
+		} catch (e) {
+			console.error('Erro ao ler autorizacoes de agendamentos do localStorage:', e);
+			return null;
+		}
+	}
+
+	salvarAutorizacaoAgendamento(id, token) {
+		try {
+			const lista = JSON.parse(localStorage.getItem(this.LS_AGENDAMENTOS_KEY)) || [];
+			const novaLista = lista.filter((item) => String(item.id) !== String(id));
+			novaLista.push({ id, token });
+			localStorage.setItem(this.LS_AGENDAMENTOS_KEY, JSON.stringify(novaLista));
+		} catch (e) {
+			console.error('Erro ao salvar autorizacao de agendamento:', e);
+		}
+	}
+
+	removerAutorizacaoAgendamento(id) {
+		try {
+			let lista = JSON.parse(localStorage.getItem(this.LS_AGENDAMENTOS_KEY)) || [];
+			lista = lista.filter((item) => String(item.id) !== String(id));
+			localStorage.setItem(this.LS_AGENDAMENTOS_KEY, JSON.stringify(lista));
+		} catch (e) {
+			console.error('Erro ao remover autorizacao de agendamento:', e);
 		}
 	}
 

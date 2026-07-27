@@ -18,5 +18,5 @@ function irParaTelaRegrasDatas() {
 }
 
 function irParaTelaAgendamentos() {
-	navigateTo(() => guardAdmin(abrirTelaAgendamentos));
+	navigateTo(abrirTelaAgendamentos);
 }
