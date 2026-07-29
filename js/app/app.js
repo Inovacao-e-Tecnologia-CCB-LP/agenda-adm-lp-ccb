@@ -50,19 +50,6 @@ async function init() {
 	}
 }
 
-function selecionarLocal(l) {
-	escolha.local = l;
-	navigateTo(showEscolherData);
-}
-
-function selecionarData(p) {
-	escolha.agendamentos = p;
-	navigateTo(showConfirmar);
-}
-
-async function verInscritos() {
-	navigateTo(showInscritos);
-}
 
 function resetAndGoHome() {
 	abortController?.abort();

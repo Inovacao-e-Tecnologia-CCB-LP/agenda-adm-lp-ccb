@@ -1,6 +1,6 @@
 class AppScriptApi {
 	url =
-		'https://script.google.com/macros/s/AKfycbyzCUQyA3isPSovB8k9MXw8GxhCJQm3Lo_d2pjw7BK-zKo5JC5OQRMsyhzvM71F90QY/exec';
+		'https://script.google.com/macros/s/AKfycbylgtFqav6XtZeHNkExIEWn0Z26bGokrM22BJDykDgqjKZI3Lss7occFD1yBOqUeCKw/exec';
 
 	async bootstrap() {
 		return await fetch(`${this.url}?action=bootstrap`).then((r) => r.json());
@@ -30,10 +30,10 @@ class AppScriptApi {
 		return await fetch(`${this.url}?action=view&entity=${entity}`).then((r) => r.json());
 	}
 
-	async update(entity, updatedData, password) {
+	async update(entity, updatedData, password = null, delete_token = null) {
 		return await fetch(`${this.url}?action=update&entity=${entity}`, {
 			method: 'POST',
-			body: JSON.stringify({ ...updatedData, password }),
+			body: JSON.stringify({ ...updatedData, password, delete_token }),
 		}).then((r) => r.json());
 	}
 

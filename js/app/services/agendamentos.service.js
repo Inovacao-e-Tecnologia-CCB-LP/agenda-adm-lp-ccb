@@ -5,16 +5,20 @@ class AgendamentosService {
 		return await appScriptApi.view(this.entity);
 	}
 
-	async excluir(id, password, signal) {
-		return await appScriptApi.deleteWithPassword(this.entity, id, password, signal);
+	async criar(dados, password = null) {
+		return await appScriptApi.create(this.entity, dados, 1);
 	}
 
-	async criar(dados, password, signal) {
-		return await appScriptApi.create(this.entity, dados, password, signal);
+	async editar(dados, password = null, delete_token = null) {
+		return await appScriptApi.update(this.entity, dados, 1, delete_token);
 	}
 
-	async editar(dados, password, signal) {
-		return await appScriptApi.update(this.entity, dados, password, signal);
+	async excluirComToken(id, delete_token) {
+		return await appScriptApi.deleteWithToken(this.entity, id, delete_token);
+	}
+
+	async excluirComSenha(id, password) {
+		return await appScriptApi.deleteWithPassword(this.entity, id, 1);
 	}
 }
 
