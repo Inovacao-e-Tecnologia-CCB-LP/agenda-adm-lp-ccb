@@ -141,9 +141,9 @@ function _getCorLocal(localId) {
 ========================= */
 async function abrirTelaAgendamentos() {
 	_calModoSomenteLeitura = false;
-	setTitle('Agendamento de Locais');
+	setTitle('Agendar Sala');
 	conteudo.innerHTML = Ui.PainelAgendamentos();
-	carregarAgendamentos(true);
+	await carregarAgendamentos(false);
 }
 
 async function abrirTelaCalendarioPublico() {
@@ -168,8 +168,6 @@ async function carregarAgendamentos(firstTime = false) {
 		let agendamentos = firstTime ? dataStore.agendamentos : await agendamentosService.listar();
 
 		if (agendamentos?.error) throw new Error(agendamentos.error);
-
-
 
 		agendamentos = agendamentos || [];
 		dataStore.agendamentos = agendamentos;
@@ -280,8 +278,12 @@ function _renderGrade(ano, mes, porDia) {
 	const primeiroDia = new Date(ano, mes, 1).getDay();
 	const totalDias = new Date(ano, mes + 1, 0).getDate();
 	const hoje = new Date();
+	hoje.setHours(0, 0, 0, 0);
+
 	const ehHoje = (d) =>
 		hoje.getFullYear() === ano && hoje.getMonth() === mes && hoje.getDate() === d;
+
+	const ehPassado = (d) => new Date(ano, mes, d).getTime() < hoje.getTime();
 
 	let html = `<div class="cal-grid">`;
 
@@ -300,11 +302,14 @@ function _renderGrade(ano, mes, porDia) {
 		const diaSemana = (primeiroDia + dia - 1) % 7;
 		const fds = diaSemana === 0 || diaSemana === 6 ? 'cal-fds' : '';
 		const hojeClass = ehHoje(dia) ? 'cal-hoje' : '';
-		let cursor = '';
 
+		const bloqueado = ehPassado(dia) && !temEvento;
+		const passadoClass = bloqueado ? 'cal-dia-passado' : '';
+
+		let cursor = '';
 		if (temEvento) {
 			cursor = 'cal-clicavel';
-		} else if (!_calModoSomenteLeitura) {
+		} else if (!_calModoSomenteLeitura && !bloqueado) {
 			cursor = 'cal-clicavel';
 		}
 
@@ -372,12 +377,12 @@ function _renderGrade(ano, mes, porDia) {
 
 		if (temEvento) {
 			click = `onclick="_abrirDetalhesDia(${dia}, decodeURIComponent('${enc}'))"`;
-		} else if (!_calModoSomenteLeitura) {
+		} else if (!_calModoSomenteLeitura && !bloqueado) {
 			click = `onclick="_novoAgendamentoDoCalendario(${dia})"`;
 		}
 
 		html += `
-      <div class="cal-cell ${fds} ${hojeClass} ${temEvento ? 'cal-tem-evento' : ''} ${cursor}"
+      <div class="cal-cell ${fds} ${hojeClass} ${passadoClass} ${temEvento ? 'cal-tem-evento' : ''} ${cursor}"
         style="${estiloCelula}" ${click}>
         <span class="cal-num">${dia}</span>
         <div class="cal-ev-pills">${pilulasHtml}</div>
@@ -525,7 +530,10 @@ function _abrirDetalhesDia(dia, eventosJson) {
 			const setorObj = _getSetorById(p.setor_id);
 			const setor = setorObj?.nome || '-';
 			const cor = _getCorLocal(p.local_id);
-			const podeEditarOuExcluir = !_calModoSomenteLeitura && (window.adminAuth?.authenticated || !!localStorageService.buscarAutorizacaoAgendamento(p.id));
+			const podeEditarOuExcluir =
+				!_calModoSomenteLeitura &&
+				(window.adminAuth?.authenticated ||
+					!!localStorageService.buscarAutorizacaoAgendamento(p.id));
 
 			return `
       <div class="cal-det-card" style="background:${cor.bgCard}; border:1.5px solid ${cor.border};">
@@ -696,7 +704,7 @@ function _compartilharWhatsapp() {
 		year: 'numeric',
 	});
 
-	const mensagem = `Agenda de ${_capitalizar(nomeMes)} da Administração (Lençóis Paulista)`;
+	const mensagem = `Calendário Salas de Reuniões de ${_capitalizar(nomeMes)} da Administração (Lençóis Paulista)`;
 
 	const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
 
@@ -805,19 +813,24 @@ async function salvarAgendamento() {
 
 		if (payload.id) {
 			const isAdmin = window.adminAuth?.authenticated;
-			const password = isAdmin ? (window.adminAuth.token || senhaDigitada) : null;
-			const auth = isAdmin ? null : localStorageService.buscarAutorizacaoAgendamento(payload.id);
+			const password = isAdmin ? senhaDigitada : null;
+			const auth = isAdmin
+				? null
+				: localStorageService.buscarAutorizacaoAgendamento(payload.id);
 			const delete_token = auth ? auth.token : null;
 
 			if (!isAdmin && !delete_token) {
-				mostrarErroCampo('erroValidacaoCamposAgendamento', 'Você não tem permissão para editar este agendamento');
+				mostrarErroCampo(
+					'erroValidacaoCamposAgendamento',
+					'Você não tem permissão para editar este agendamento',
+				);
 				return;
 			}
 
 			r = await agendamentosService.editar(payload, password, delete_token);
 		} else {
 			const isAdmin = window.adminAuth?.authenticated;
-			const password = isAdmin ? (window.adminAuth.token || senhaDigitada) : null;
+			const password = isAdmin ? senhaDigitada : null;
 
 			r = await agendamentosService.criar(payload, password);
 

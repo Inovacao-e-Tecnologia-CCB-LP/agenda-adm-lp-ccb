@@ -1185,6 +1185,13 @@ header .container {
 	transform: scale(0.92);
 }
 
+.cal-dia-passado {
+	opacity: 0.45;
+	filter: grayscale(0.5);
+	cursor: not-allowed !important;
+	pointer-events: none;
+}
+
 /* ── Pílulas mobile (bolinhas) ──────────────────────────── */
 .cal-ev-pills {
 	display: flex;
