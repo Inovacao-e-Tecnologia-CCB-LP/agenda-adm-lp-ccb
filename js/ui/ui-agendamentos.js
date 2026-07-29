@@ -560,6 +560,18 @@ function _abrirDetalhesDia(dia, eventosJson) {
             <span>${setor}</span>
           </div>
 
+          <!-- RESPONSÁVEL -->
+          ${
+				p.responsavel
+					? `
+<div class="cal-det-row">
+	<i class="bi bi-person" style="color:${cor.dot}"></i>
+	<span>${p.responsavel}</span>
+</div>
+`
+					: ''
+			}
+
           <!-- OBSERVAÇÕES -->
           ${
 				p.observacoes
@@ -729,6 +741,7 @@ function _abrirModalAgendamentos(agendamentos = null) {
 	document.getElementById('progId').value = '';
 	document.getElementById('progLocal').value = '';
 	document.getElementById('progSetor').value = '';
+	document.getElementById('progResponsavel').value = '';
 	inputData.value = '';
 	document.getElementById('progDiaSemana').value = '';
 	document.getElementById('progHorario').value = '';
@@ -743,6 +756,8 @@ function _abrirModalAgendamentos(agendamentos = null) {
 		document.getElementById('progSetor').value = agendamentos.setor_id ?? '';
 
 		inputData.value = agendamentos.data || '';
+
+		document.getElementById('progResponsavel').value = agendamentos.responsavel ?? '';
 
 		document.getElementById('progHorario').value = (agendamentos.horario || '').replace(
 			"'",
@@ -901,12 +916,13 @@ function montarPayloadAgendamento() {
 	const id = document.getElementById('progId').value;
 	const local_id = document.getElementById('progLocal').value;
 	const setor_id = document.getElementById('progSetor').value;
+	const responsavel = document.getElementById('progResponsavel').value.trim();
 	const descricao = document.getElementById('progDiaSemana').value;
 	const data = document.getElementById('progData').value;
 	const horario = document.getElementById('progHorario').value;
 	const observacoes = document.getElementById('progObs').value;
 
-	if (!local_id || !setor_id || !data || !horario) {
+	if (!local_id || !setor_id || !responsavel || !data || !horario) {
 		mostrarErroCampo('erroValidacaoCamposAgendamento', 'Preencha todos os campos corretamente');
 
 		return null;
@@ -929,6 +945,7 @@ function montarPayloadAgendamento() {
 		id: id ? Number(id) : null,
 		local_id: Number(local_id),
 		setor_id: Number(setor_id),
+		responsavel,
 		descricao,
 		data_agendamento: data,
 		horario,
