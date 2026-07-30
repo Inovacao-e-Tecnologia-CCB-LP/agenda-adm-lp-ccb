@@ -2052,3 +2052,13 @@ header .container {
 		padding: 0.25rem 0.75rem;
 	}
 }
+
+.btn-youtube {
+	transition: transform 0.2s;
+}
+
+@media (hover: hover) {
+	.btn-youtube:hover {
+		transform: scale(1.02);
+	}
+}
