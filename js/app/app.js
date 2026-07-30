@@ -50,7 +50,6 @@ async function init() {
 	}
 }
 
-
 function resetAndGoHome() {
 	abortController?.abort();
 	escolha = {};

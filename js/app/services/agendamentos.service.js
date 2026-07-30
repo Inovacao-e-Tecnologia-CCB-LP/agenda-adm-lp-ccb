@@ -6,11 +6,11 @@ class AgendamentosService {
 	}
 
 	async criar(dados, password = null) {
-		return await appScriptApi.create(this.entity, dados, 1);
+		return await appScriptApi.create(this.entity, dados, password);
 	}
 
 	async editar(dados, password = null, delete_token = null) {
-		return await appScriptApi.update(this.entity, dados, 1, delete_token);
+		return await appScriptApi.update(this.entity, dados, password, delete_token);
 	}
 
 	async excluirComToken(id, delete_token) {
@@ -18,7 +18,7 @@ class AgendamentosService {
 	}
 
 	async excluirComSenha(id, password) {
-		return await appScriptApi.deleteWithPassword(this.entity, id, 1);
+		return await appScriptApi.deleteWithPassword(this.entity, id, password);
 	}
 }
 
