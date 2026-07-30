@@ -173,14 +173,6 @@ async function carregarAgendamentos(firstTime = false) {
 		dataStore.agendamentos = agendamentos;
 		_calDados = agendamentos;
 
-		if (!agendamentos.length) {
-			document.getElementById('listaAgendamentos').innerHTML = `
-        <div class="alert alert-secondary text-center mt-3">
-          Nenhum agendamento cadastrado
-        </div>`;
-			return;
-		}
-
 		_carregarCoresSalvas();
 		// Garante que todos os locais conhecidos tenham cor atribuída
 		(dataStore.locais || []).forEach((l) => _getCorLocal(l.id));
@@ -216,6 +208,12 @@ function _construirMeses(agendamentos) {
 	_calMeses = Array.from(map.values()).sort((a, b) =>
 		a.ano !== b.ano ? a.ano - b.ano : a.mes - b.mes,
 	);
+
+	// Se não há nenhum agendamento, exibe o mês atual mesmo assim
+	if (!_calMeses.length) {
+		const hoje = new Date();
+		_calMeses = [{ ano: hoje.getFullYear(), mes: hoje.getMonth() }];
+	}
 }
 
 /* =========================
@@ -677,20 +675,45 @@ async function _baixarPdfCalendario() {
 	const elemento = document.querySelector('.cal-wrapper');
 
 	elemento.classList.add('exportando');
-
 	const canvas = await _capturarCalendario();
-
 	elemento.classList.remove('exportando');
 
 	const imgData = canvas.toDataURL('image/png');
 
+	// Escolhe a orientação com base na proporção do calendário capturado
+	const isPaisagem = canvas.width > canvas.height;
+	const orientacao = isPaisagem ? 'l' : 'p';
+
 	const { jsPDF } = window.jspdf;
-	const pdf = new jsPDF('p', 'mm', 'a4');
+	const pdf = new jsPDF(orientacao, 'mm', 'a4');
 
-	const largura = 210;
-	const altura = (canvas.height * largura) / canvas.width;
+	const pageWidth = pdf.internal.pageSize.getWidth();
+	const pageHeight = pdf.internal.pageSize.getHeight();
 
-	pdf.addImage(imgData, 'PNG', 0, 10, largura, altura);
+	const margem = 10; // mm de margem em cada lado
+	const maxWidth = pageWidth - margem * 2;
+	const maxHeight = pageHeight - margem * 2;
+
+	const imgRatio = canvas.width / canvas.height;
+	const maxRatio = maxWidth / maxHeight;
+
+	let finalWidth, finalHeight;
+
+	if (imgRatio > maxRatio) {
+		// Imagem mais "larga" que a área disponível -> limita pela largura
+		finalWidth = maxWidth;
+		finalHeight = maxWidth / imgRatio;
+	} else {
+		// Imagem mais "alta" -> limita pela altura
+		finalHeight = maxHeight;
+		finalWidth = maxHeight * imgRatio;
+	}
+
+	// Centraliza na página
+	const x = (pageWidth - finalWidth) / 2;
+	const y = (pageHeight - finalHeight) / 2;
+
+	pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
 	pdf.save('calendarioMensalAgendaADM.pdf');
 }
 
