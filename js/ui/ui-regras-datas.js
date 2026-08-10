@@ -104,15 +104,36 @@ function renderCardsRegrasDatas(regras) {
 					</button>
                 </div>
               </div>
-              <div class="card-info-grid">
-                <div class="card-info-cell">
-                  <i class="bi bi-calendar-week"></i>
-                  <span>${formatarQuando(r.dia_semana, r.ordinal)}</span>
-                </div>
-                <div class="card-info-cell">
-                  <i class="bi bi-clock"></i>
-                  <span>${formatarHorario(r.horario)}</span>
-                </div>
+<div class="card-info-grid">
+  <div class="card-info-cell">
+    <i class="bi bi-calendar-week"></i>
+    <span>${formatarQuando(r.dia_semana, r.ordinal, r.intervalo_meses)}</span>
+  </div>
+  <div class="card-info-cell">
+    <i class="bi bi-clock"></i>
+    <span>${formatarHorario(r.horario)}${r.horario_termino ? ` às ${formatarHorario(r.horario_termino)}` : ''}</span>
+  </div>
+  ${
+		r.responsavel
+			? `
+  <div class="card-info-cell">
+    <i class="bi bi-person"></i>
+    <span>${r.responsavel}</span>
+  </div>
+  `
+			: ''
+  }
+    ${
+		r.observacoes
+			? `
+  <div class="card-info-cell">
+    <i class="bi bi-chat-left-text me-1"></i>
+    <span>${r.observacoes}</span>
+  </div>
+  `
+			: ''
+	}
+</div>
               </div>
             </div>
           </div>`;
@@ -136,12 +157,22 @@ function montarPayloadRegra() {
 	const ordinal = document.getElementById('regraOrdinal').value;
 	const dia = document.getElementById('regraDiaSemana').value;
 	const horario = document.getElementById('regraHorario').value;
-	const elObs = document.getElementById('regraObservacoes');
-	const observacoes = elObs && elObs.offsetParent !== null ? elObs.value : null;
+	const horarioTermino = document.getElementById('regraHorarioTermino').value;
+	const observacoes = document.getElementById('regraObservacoes').value.trim();
+	const responsavel = document.getElementById('regraResponsavel').value.trim();
 	const ativo = document.getElementById('regraAtivo').checked;
+	const intervalo_meses = document.getElementById('regraIntervaloMeses').value;
 
 	if (!localId || !setorId || !horario) {
 		mostrarErroCampo('erroValidacaoCamposRegra', 'Preencha todos os campos corretamente');
+		return null;
+	}
+
+	if (horarioTermino && horarioTermino <= horario) {
+		mostrarErroCampo(
+			'erroValidacaoCamposRegra',
+			'O horário de término deve ser maior que o horário de início',
+		);
 		return null;
 	}
 
@@ -152,8 +183,11 @@ function montarPayloadRegra() {
 		ordinal: Number(ordinal),
 		dia_semana: Number(dia),
 		horario: String(horario),
-		observacoes: observacoes ? String(observacoes).trim() : null,
+		horario_termino: horarioTermino ? String(horarioTermino) : null,
+		observacoes: observacoes || null,
+		responsavel: responsavel || null,
 		ativo: ativo,
+		intervalo_meses: Number(intervalo_meses) || 1,
 	};
 }
 
@@ -162,8 +196,13 @@ function preencherFormularioRegra(regra) {
 	document.getElementById('regraOrdinal').value = regra.ordinal;
 	document.getElementById('regraDiaSemana').value = regra.dia_semana;
 	document.getElementById('regraHorario').value = formatarHorario(regra.horario);
+	document.getElementById('regraHorarioTermino').value = regra.horario_termino
+		? formatarHorario(regra.horario_termino)
+		: '';
 	document.getElementById('regraObservacoes').value = regra.observacoes || '';
+	document.getElementById('regraResponsavel').value = regra.responsavel || '';
 	document.getElementById('regraAtivo').checked = regra.ativo;
+	document.getElementById('regraIntervaloMeses').value = regra.intervalo_meses || 1;
 
 	// LOCAL
 	const selectLocal = document.getElementById('regraLocal');
@@ -188,12 +227,30 @@ function preencherFormularioRegra(regra) {
 	});
 }
 
-function formatarQuando(dia, ordinal) {
+function limparFormularioRegra() {
+	document.getElementById('regraId').value = '';
+	document.getElementById('regraLocal').value = '';
+	document.getElementById('regraSetor').value = '';
+	document.getElementById('regraOrdinal').value = '0';
+	document.getElementById('regraDiaSemana').value = '1';
+	document.getElementById('regraHorario').value = '';
+	document.getElementById('regraHorarioTermino').value = '';
+	document.getElementById('regraObservacoes').value = '';
+	document.getElementById('regraResponsavel').value = '';
+	document.getElementById('regraAtivo').checked = true;
+	document.getElementById('regraIntervaloMeses').value = '1';
+}
+
+function formatarQuando(dia, ordinal, intervaloMeses) {
 	const dias = ['', 'Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 	const nomeDia = dias[dia] || 'Dia?';
-	if (Number(ordinal) === 0) return `Todas(os): ${nomeDia}`;
-	if (Number(ordinal) === -1) return `Última(o) ${nomeDia}`;
-	return `${ordinal}ª ${nomeDia}`;
+	let base;
+	if (Number(ordinal) === 0) base = `Todas(os): ${nomeDia}`;
+	else if (Number(ordinal) === -1) base = `Última(o) ${nomeDia}`;
+	else base = `${ordinal}ª ${nomeDia}`;
+
+	if (Number(intervaloMeses) > 1) base += ` · a cada ${intervaloMeses} meses`;
+	return base;
 }
 
 async function reloadRegras() {
@@ -217,47 +274,45 @@ function toggleObservacoes(show) {
    MODAL • NOVO / EDITAR
 ========================= */
 
-function abrirModalNovaRegra() {
-	limparErroCampo('erroValidacaoCamposRegra');
+function abrirModalNovaRegra(btn) {
+	const textoOriginal = btn.innerHTML;
 
-	document.getElementById('modalRegraTitulo').innerText = 'Nova Regra';
-	limparFormularioRegra();
+	travarUI();
+	try {
+		btn.disabled = true;
+		btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
 
-	toggleObservacoes(true);
+		limparErroCampo('erroValidacaoCamposRegra');
+		document.getElementById('modalRegraTitulo').innerText = 'Nova Regra';
+		limparFormularioRegra();
 
-	// LOCAL
-	const selectLocal = document.getElementById('regraLocal');
-	selectLocal.innerHTML = '<option value="">Selecione o local</option>';
-	dataStore.locais.forEach((l) => {
-		const opt = document.createElement('option');
-		opt.value = l.id;
-		opt.text = l.nome;
-		selectLocal.appendChild(opt);
-	});
+		toggleObservacoes(true);
 
-	// SETOR
-	const selectSetor = document.getElementById('regraSetor');
-	selectSetor.innerHTML = '<option value="">Selecione o setor</option>';
-	dataStore.setores.forEach((s) => {
-		const opt = document.createElement('option');
-		opt.value = s.id;
-		opt.text = s.nome;
-		selectSetor.appendChild(opt);
-	});
+		const selectLocal = document.getElementById('regraLocal');
+		selectLocal.innerHTML = '<option value="">Selecione o local</option>';
+		dataStore.locais.forEach((l) => {
+			const opt = document.createElement('option');
+			opt.value = l.id;
+			opt.text = l.nome;
+			selectLocal.appendChild(opt);
+		});
 
-	document.getElementById('btnSalvarRegra').onclick = salvarRegra;
-	new bootstrap.Modal(document.getElementById('modalRegra')).show();
-}
+		const selectSetor = document.getElementById('regraSetor');
+		selectSetor.innerHTML = '<option value="">Selecione o setor</option>';
+		dataStore.setores.forEach((s) => {
+			const opt = document.createElement('option');
+			opt.value = s.id;
+			opt.text = s.nome;
+			selectSetor.appendChild(opt);
+		});
 
-function limparFormularioRegra() {
-	document.getElementById('regraId').value = '';
-	document.getElementById('regraLocal').value = '';
-	document.getElementById('regraSetor').value = '';
-	document.getElementById('regraOrdinal').value = '0';
-	document.getElementById('regraDiaSemana').value = '1';
-	document.getElementById('regraHorario').value = '';
-	document.getElementById('regraObservacoes').value = '';
-	document.getElementById('regraAtivo').checked = true;
+		document.getElementById('btnSalvarRegra').onclick = salvarRegra;
+		new bootstrap.Modal(document.getElementById('modalRegra')).show();
+	} finally {
+		liberarUI();
+		btn.disabled = false;
+		btn.innerHTML = textoOriginal;
+	}
 }
 
 /* =========================
@@ -274,6 +329,7 @@ async function salvarRegra() {
 	if (!payload) return;
 
 	_travarModal('modalRegra');
+	travarUI();
 	btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Salvando`;
 
 	try {
@@ -304,6 +360,7 @@ async function salvarRegra() {
 		abrirModalAviso('Erro', 'Erro ao salvar regra');
 	} finally {
 		_liberarModal('modalRegra');
+		liberarUI();
 		btn.innerHTML = textoOriginal;
 	}
 }
@@ -318,6 +375,7 @@ async function editarRegra(id, btn) {
 	let salvou = false;
 	const textoOriginal = btn.innerHTML;
 
+	travarUI();
 	try {
 		btn.disabled = true;
 		btn.innerHTML = `
@@ -335,7 +393,7 @@ async function editarRegra(id, btn) {
 		limparFormularioRegra();
 		preencherFormularioRegra(regra);
 
-		toggleObservacoes(false);
+		toggleObservacoes(true);
 
 		document.getElementById('modalRegraTitulo').innerText = 'Editar Regra';
 		document.getElementById('btnSalvarRegra').onclick = async () => {
@@ -362,6 +420,7 @@ async function editarRegra(id, btn) {
 		console.error(err);
 		abrirModalAviso('Erro', 'Erro ao carregar regra');
 	} finally {
+		liberarUI();
 		btn.disabled = false;
 		btn.innerHTML = textoOriginal;
 	}
@@ -382,6 +441,7 @@ function excluirRegra(id, btnTrash) {
 		const textoTrash = btnTrash.innerHTML;
 
 		_travarModal('confirmModal');
+		travarUI();
 		try {
 			btnOk.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Excluindo`;
 
@@ -402,6 +462,7 @@ function excluirRegra(id, btnTrash) {
 			abrirModalAviso('Erro', 'Erro ao excluir regra');
 		} finally {
 			_liberarModal('confirmModal');
+			liberarUI();
 			btnOk.innerHTML = textoOk;
 			btnTrash.innerHTML = textoTrash;
 			bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide();
