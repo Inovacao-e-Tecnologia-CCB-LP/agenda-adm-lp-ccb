@@ -30,7 +30,7 @@
 		andrea: 'Andréa',
 		andreia: 'Andréia',
 		angelo: 'Ângelo',
-		anicio: 'Aníncio',
+		anicio: 'Anício',
 		anita: 'Anita',
 		antonio: 'Antônio',
 		ariadne: 'Ariadne',
@@ -106,7 +106,6 @@
 		giovana: 'Giovana',
 		giovanna: 'Giovanna',
 		gleice: 'Gleice',
-		glória: 'Glória',
 		gloria: 'Glória',
 		goncalo: 'Gonçalo',
 		gracas: 'Graças',
@@ -190,7 +189,7 @@
 		// N
 		natalia: 'Natália',
 		nathanael: 'Natanael',
-		nicolas: 'Nícolás',
+		nicolas: 'Nícolas',
 		nicole: 'Nicole',
 		nilton: 'Nilton',
 		noemia: 'Noêmia',
@@ -298,7 +297,6 @@
 		freitas: 'Freitas',
 		garcia: 'Garcia',
 		gomes: 'Gomes',
-		gonçalves: 'Gonçalves',
 		goncalves: 'Gonçalves',
 		guimaraes: 'Guimarães',
 		jesus: 'Jesus',
@@ -334,7 +332,7 @@
 		pinto: 'Pinto',
 		pires: 'Pires',
 		queiroz: 'Queiroz',
-		queirós: 'Queirós',
+		queiros: 'Queirós',
 		ramos: 'Ramos',
 		reis: 'Reis',
 		ribeiro: 'Ribeiro',
@@ -383,7 +381,6 @@
 		if (!nomeOriginal || !nomeOriginal.trim()) return null;
 
 		const palavras = nomeOriginal.trim().split(/\s+/);
-		let algumCorrigido = false;
 		let algumDiferente = false;
 
 		const palavrasCorrigidas = palavras.map((palavra) => {
@@ -399,10 +396,6 @@
 
 				if (resultado !== palavra) {
 					algumDiferente = true;
-					// Só marca como "corrigido com acento" se de fato adicionou/mudou acento
-					if (temAcento(resultado) && !temAcento(palavra)) {
-						algumCorrigido = true;
-					}
 				}
 				return resultado;
 			}
@@ -410,8 +403,9 @@
 			return palavra;
 		});
 
-		// Só retorna sugestão se houver diferença real de acentuação
-		if (!algumCorrigido) return null;
+		// Só retorna sugestão se houver diferença real entre o nome digitado e o corrigido
+		// (cobre tanto adição de acento quanto correções de grafia sem acento, ex: Esther -> Ester)
+		if (!algumDiferente) return null;
 
 		const nomeCorrigido = palavrasCorrigidas.join(' ');
 		return nomeCorrigido === nomeOriginal ? null : nomeCorrigido;

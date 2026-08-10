@@ -335,6 +335,9 @@ function _renderGrade(ano, mes, porDia) {
 				const local = _getLocalById(ev.local_id);
 				const nome = local?.nome || 'Local';
 				const horario = ev.horario ? formatarHorario(ev.horario) : '-';
+				const horarioTermino = ev.horario_termino
+					? formatarHorario(ev.horario_termino)
+					: '';
 				const setorObj = _getSetorById(ev.setor_id);
 				const setor = setorObj?.nome || '-';
 
@@ -342,14 +345,11 @@ function _renderGrade(ano, mes, porDia) {
 					// Público
 					pilulasHtml += `
     <div class="cal-ev-publico-wrapper">
-      <span class="cal-ev-pill"
-        style="background:${cor.dot}">
-      </span>
-
+      <span class="cal-ev-pill" style="background:${cor.dot}"></span>
       <div class="cal-ev-publico">
         <div class="cal-ev-nome">${nome}</div>
         <div class="cal-ev-info">
-          ${horario} - ${setor}
+          ${horario}${horarioTermino ? ` - ${horarioTermino}` : ''} | ${setor}
         </div>
       </div>
     </div>
@@ -557,7 +557,7 @@ function _abrirDetalhesDia(dia, eventosJson) {
           <!-- HORÁRIO -->
           <div class="cal-det-row">
             <i class="bi bi-clock-fill" style="color:${cor.dot}"></i>
-            <span>${formatarHorario(p.horario) || '-'}</span>
+            <span>${formatarHorario(p.horario) || '-'}${p.horario_termino ? ` às ${formatarHorario(p.horario_termino)}` : ''}</span>
           </div>
 
           <!-- SETOR -->
@@ -776,6 +776,7 @@ function _abrirModalAgendamentos(agendamentos = null) {
 	inputData.value = '';
 	document.getElementById('progDiaSemana').value = '';
 	document.getElementById('progHorario').value = '';
+	document.getElementById('progHorarioTermino').value = '';
 	document.getElementById('progObs').value = '';
 
 	if (agendamentos) {
@@ -794,6 +795,10 @@ function _abrirModalAgendamentos(agendamentos = null) {
 			"'",
 			'',
 		);
+
+		document.getElementById('progHorarioTermino').value = (
+			agendamentos.horario_termino || ''
+		).replace("'", '');
 
 		document.getElementById('progObs').value = agendamentos.observacoes ?? '';
 
@@ -948,6 +953,7 @@ function excluirAgendamento(id, btnTrash) {
 /* =========================
    HELPERS
 ========================= */
+
 function montarPayloadAgendamento() {
 	const id = document.getElementById('progId').value;
 	const local_id = document.getElementById('progLocal').value;
@@ -956,11 +962,19 @@ function montarPayloadAgendamento() {
 	const descricao = document.getElementById('progDiaSemana').value;
 	const data = document.getElementById('progData').value;
 	const horario = document.getElementById('progHorario').value;
+	const horario_termino = document.getElementById('progHorarioTermino').value;
 	const observacoes = document.getElementById('progObs').value;
 
 	if (!local_id || !setor_id || !responsavel || !data || !horario) {
 		mostrarErroCampo('erroValidacaoCamposAgendamento', 'Preencha todos os campos corretamente');
+		return null;
+	}
 
+	if (horario_termino && horario_termino <= horario) {
+		mostrarErroCampo(
+			'erroValidacaoCamposAgendamento',
+			'O horário de término deve ser maior que o horário de início',
+		);
 		return null;
 	}
 
@@ -985,6 +999,7 @@ function montarPayloadAgendamento() {
 		descricao,
 		data_agendamento: data,
 		horario,
+		horario_termino: horario_termino || null,
 		observacoes,
 	};
 }

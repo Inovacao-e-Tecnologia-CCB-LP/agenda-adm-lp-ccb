@@ -264,6 +264,7 @@
 					<div class="modal-body">
 						<input type="hidden" id="regraId" />
 
+						<!-- LOCAL -->
 						<div class="mb-3">
 							<label class="form-label fw-semibold" for="regraLocal"
 								><i class="bi bi-geo-alt me-1"></i>Local</label
@@ -273,6 +274,7 @@
 							</select>
 						</div>
 
+						<!-- SETOR -->
 						<div class="mb-3">
 							<label class="form-label fw-semibold" for="regraSetor">
 								<i class="bi bi-diagram-3 me-1"></i>Setor
@@ -282,8 +284,19 @@
 							</select>
 						</div>
 
+						<!-- RESPONSÁVEL -->
+						<div class="form-floating mb-3">
+							<input
+								type="text"
+								class="form-control"
+								id="regraResponsavel"
+								placeholder="Responsável"
+							/>
+							<label for="regraResponsavel">Responsável</label>
+						</div>
+
 						<div class="row">
-							<div class="col-6">
+							<div class="col-4">
 								<div class="mb-3">
 									<label class="form-label fw-semibold" for="regraDiaSemana"
 										><i class="bi bi-calendar-week me-1"></i>Dia da
@@ -300,7 +313,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-6">
+							<div class="col-4">
 								<div class="mb-3">
 									<label class="form-label fw-semibold" for="regraOrdinal"
 										><i class="bi bi-arrow-repeat me-1"></i>Ocorrência</label
@@ -316,18 +329,53 @@
 									</select>
 								</div>
 							</div>
+							<div class="col-4">
+								<div class="mb-3">
+									<label class="form-label fw-semibold" for="regraIntervaloMeses"
+										><i class="bi bi-calendar-range me-1"></i>Frequência</label
+									>
+									<select
+										class="form-select agenda-select"
+										id="regraIntervaloMeses"
+									>
+										<option value="1">Todo mês</option>
+										<option value="2">A cada 2 meses</option>
+										<option value="3">A cada 3 meses</option>
+										<option value="4">A cada 4 meses</option>
+										<option value="6">A cada 6 meses</option>
+										<option value="12">Anual</option>
+									</select>
+								</div>
+							</div>
 						</div>
 
-						<div class="form-floating mb-3">
-							<input
-								type="time"
-								class="form-control"
-								id="regraHorario"
-								placeholder="Horário"
-							/>
-							<label for="regraHorario">Horário</label>
+						<!-- HORÁRIO -->
+						<div class="row">
+							<div class="col-6">
+								<div class="form-floating mb-3">
+									<input
+										type="time"
+										class="form-control"
+										id="regraHorario"
+										placeholder="Início"
+									/>
+									<label for="regraHorario">Horário Início</label>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="form-floating mb-3">
+									<input
+										type="time"
+										class="form-control"
+										id="regraHorarioTermino"
+										placeholder="Término"
+									/>
+									<label for="regraHorarioTermino">Horário Término</label>
+								</div>
+							</div>
 						</div>
 
+						<!-- OBSERVAÇÕES -->
 						<div class="form-floating mb-1">
 							<textarea
 								class="form-control"
@@ -441,13 +489,30 @@
 						</div>
 
 						<!-- HORÁRIO -->
-						<div class="mb-3">
-							<label for="progHorario" class="form-label fw-semibold">
-								<i class="bi bi-clock me-1"></i>Horário
-							</label>
-							<input type="time" class="form-control" id="progHorario" />
+						<div class="row">
+							<div class="col-6">
+								<div class="mb-3">
+									<label for="progHorario" class="form-label fw-semibold">
+										<i class="bi bi-clock me-1"></i>Horário Início
+									</label>
+									<input type="time" class="form-control" id="progHorario" />
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="mb-3">
+									<label for="progHorarioTermino" class="form-label fw-semibold">
+										<i class="bi bi-clock-history me-1"></i>Horário Término
+									</label>
+									<input
+										type="time"
+										class="form-control"
+										id="progHorarioTermino"
+									/>
+								</div>
+							</div>
 						</div>
 
+						<!-- OBSERVAÇÕES -->
 						<div class="mb-3">
 							<label class="form-label fw-semibold" for="progObs">
 								<i class="bi bi-chat-left-text me-1"></i>Observações
