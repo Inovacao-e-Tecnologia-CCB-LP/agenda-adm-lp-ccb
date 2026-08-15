@@ -199,21 +199,27 @@ async function carregarAgendamentos(firstTime = false) {
 
 function _construirMeses(agendamentos) {
 	const map = new Map();
+
 	agendamentos.forEach((p) => {
 		if (!p.data) return;
 		const d = _parseDataAgendamento(p.data);
 		const key = `${d.getFullYear()}-${d.getMonth()}`;
 		if (!map.has(key)) map.set(key, { ano: d.getFullYear(), mes: d.getMonth() });
 	});
+
+	// Garante que todos os meses do ano atual, a partir do mês atual, apareçam nos dois calendários
+	const hoje = new Date();
+	const anoAtual = hoje.getFullYear();
+	const mesAtual = hoje.getMonth();
+
+	for (let mes = mesAtual; mes <= 11; mes++) {
+		const key = `${anoAtual}-${mes}`;
+		if (!map.has(key)) map.set(key, { ano: anoAtual, mes });
+	}
+
 	_calMeses = Array.from(map.values()).sort((a, b) =>
 		a.ano !== b.ano ? a.ano - b.ano : a.mes - b.mes,
 	);
-
-	// Se não há nenhum agendamento, exibe o mês atual mesmo assim
-	if (!_calMeses.length) {
-		const hoje = new Date();
-		_calMeses = [{ ano: hoje.getFullYear(), mes: hoje.getMonth() }];
-	}
 }
 
 /* =========================
