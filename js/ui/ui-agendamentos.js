@@ -117,7 +117,7 @@ function _carregarCoresSalvas() {
 function _salvarCores() {
 	try {
 		localStorage.setItem('agenda_cores_locais', JSON.stringify(_calCoresLocais));
-	} catch {}
+	} catch { }
 }
 
 function _getCorLocal(localId) {
@@ -168,6 +168,15 @@ async function carregarAgendamentos(firstTime = false) {
 		let agendamentos = firstTime ? dataStore.agendamentos : await agendamentosService.listar();
 
 		if (agendamentos?.error) throw new Error(agendamentos.error);
+
+		if (!dataStore.tiposReuniao && typeof tipoReuniaoService !== 'undefined') {
+			try {
+				const tipos = await tipoReuniaoService.listar();
+				if (tipos && !tipos.error) dataStore.tiposReuniao = tipos;
+			} catch (e) {
+				console.error('Erro ao carregar tipos de reunião:', e);
+			}
+		}
 
 		agendamentos = agendamentos || [];
 		dataStore.agendamentos = agendamentos;
@@ -223,7 +232,7 @@ function _construirMeses(agendamentos) {
 }
 
 /* =========================
-    RENDERS
+	RENDERS
 ========================= */
 function _renderCalendario() {
 	const container = document.getElementById('listaAgendamentos');
@@ -463,7 +472,7 @@ function _renderAcoesPublico() {
 }
 
 /* =========================
-    NAVEGAÇÃO
+	NAVEGAÇÃO
 ========================= */
 function _calNavegar(delta) {
 	const novo = _calIdx + delta;
@@ -533,6 +542,7 @@ function _abrirDetalhesDia(dia, eventosJson) {
 			const local = _getLocalById(p.local_id);
 			const setorObj = _getSetorById(p.setor_id);
 			const setor = setorObj?.nome || '-';
+			const tipoReuniaoDesc = _getTipoReuniaoById(p.tipo_reuniao ?? p.tipo_reuniao_id);
 			const cor = _getCorLocal(p.local_id);
 			const podeEditarOuExcluir =
 				!_calModoSomenteLeitura &&
@@ -572,9 +582,19 @@ function _abrirDetalhesDia(dia, eventosJson) {
             <span>${setor}</span>
           </div>
 
+          <!-- TIPO DE REUNIÃO -->
+          ${tipoReuniaoDesc
+					? `
+<div class="cal-det-row">
+	<i class="bi bi-people-fill" style="color:${cor.dot}"></i>
+	<span>${tipoReuniaoDesc}</span>
+</div>
+`
+					: ''
+				}
+
           <!-- RESPONSÁVEL -->
-          ${
-				p.responsavel
+          ${p.responsavel
 					? `
 <div class="cal-det-row">
 	<i class="bi bi-person" style="color:${cor.dot}"></i>
@@ -582,11 +602,10 @@ function _abrirDetalhesDia(dia, eventosJson) {
 </div>
 `
 					: ''
-			}
+				}
 
           <!-- OBSERVAÇÕES -->
-          ${
-				p.observacoes
+          ${p.observacoes
 					? `
 <div class="cal-det-row align-items-start">
 	<i class="bi bi-chat-left-text mt-1" style="color:${cor.dot}"></i>
@@ -594,13 +613,12 @@ function _abrirDetalhesDia(dia, eventosJson) {
 </div>
 `
 					: ''
-			}
+				}
 
         </div>
 
-        ${
-			podeEditarOuExcluir
-				? `
+        ${podeEditarOuExcluir
+					? `
         <button class="btn btn-outline-primary btn-sm w-100 mt-2"
           onclick="_editarDoCalendario(${p.id})">
           <i class="bi bi-pencil me-1"></i>Editar
@@ -611,8 +629,8 @@ function _abrirDetalhesDia(dia, eventosJson) {
           <i class="bi bi-trash me-1"></i>Excluir
         </button>
         `
-				: ''
-		}
+					: ''
+				}
 
       </div>`;
 		})
@@ -752,6 +770,28 @@ function _abrirModalAgendamentos(agendamentos = null) {
 
 	btnSalvar.onclick = salvarAgendamento;
 
+	// Garante tipos de reunião carregados
+	if (!dataStore.tiposReuniao) {
+		tipoReuniaoService.listar().then((tipos) => {
+			if (!tipos?.error) {
+				dataStore.tiposReuniao = tipos || [];
+				const selectTipoReuniao = document.getElementById('progTipoReuniao');
+				if (selectTipoReuniao) {
+					selectTipoReuniao.innerHTML = '<option value="">Selecione o tipo de reunião</option>';
+					dataStore.tiposReuniao.forEach((t) => {
+						const opt = document.createElement('option');
+						opt.value = t.id;
+						opt.text = t.descricao;
+						selectTipoReuniao.appendChild(opt);
+					});
+					if (agendamentos) {
+						selectTipoReuniao.value = agendamentos.tipo_reuniao ?? '';
+					}
+				}
+			}
+		});
+	}
+
 	// ===== POPULA LOCAIS =====
 	selectLocal.innerHTML = '<option value="">Selecione o local</option>';
 	(dataStore.locais || []).forEach((l) => {
@@ -770,6 +810,16 @@ function _abrirModalAgendamentos(agendamentos = null) {
 		selectSetor.appendChild(opt);
 	});
 
+	// ===== POPULA TIPOS DE REUNIÃO =====
+	const selectTipoReuniao = document.getElementById('progTipoReuniao');
+	selectTipoReuniao.innerHTML = '<option value="">Selecione o tipo de reunião</option>';
+	(dataStore.tiposReuniao || []).forEach((t) => {
+		const opt = document.createElement('option');
+		opt.value = t.id;
+		opt.text = t.descricao;
+		selectTipoReuniao.appendChild(opt);
+	});
+
 	const inputData = document.getElementById('progData');
 	const hoje = new Date();
 	const hojeStr = hoje.toISOString().split('T')[0];
@@ -781,6 +831,7 @@ function _abrirModalAgendamentos(agendamentos = null) {
 	document.getElementById('progResponsavel').value = '';
 	inputData.value = '';
 	document.getElementById('progDiaSemana').value = '';
+	document.getElementById('progTipoReuniao').value = '';
 	document.getElementById('progHorario').value = '';
 	document.getElementById('progHorarioTermino').value = '';
 	document.getElementById('progObs').value = '';
@@ -792,6 +843,7 @@ function _abrirModalAgendamentos(agendamentos = null) {
 		document.getElementById('progId').value = agendamentos.id ?? '';
 		document.getElementById('progLocal').value = agendamentos.local_id ?? '';
 		document.getElementById('progSetor').value = agendamentos.setor_id ?? '';
+		document.getElementById('progTipoReuniao').value = agendamentos.tipo_reuniao ?? '';
 
 		inputData.value = agendamentos.data || '';
 
@@ -964,6 +1016,7 @@ function montarPayloadAgendamento() {
 	const id = document.getElementById('progId').value;
 	const local_id = document.getElementById('progLocal').value;
 	const setor_id = document.getElementById('progSetor').value;
+	const tipo_reuniao = document.getElementById('progTipoReuniao').value;
 	const responsavel = document.getElementById('progResponsavel').value.trim();
 	const descricao = document.getElementById('progDiaSemana').value;
 	const data = document.getElementById('progData').value;
@@ -1001,6 +1054,7 @@ function montarPayloadAgendamento() {
 		id: id ? Number(id) : null,
 		local_id: Number(local_id),
 		setor_id: Number(setor_id),
+		tipo_reuniao: tipo_reuniao ? Number(tipo_reuniao) : null,
 		responsavel,
 		descricao,
 		data_agendamento: data,
@@ -1103,6 +1157,13 @@ function _hashId(id) {
 
 function _getSetorById(id) {
 	return (dataStore.setores || []).find((s) => String(s.id) === String(id));
+}
+
+function _getTipoReuniaoById(id) {
+	if (!id) return null;
+	const encontrado = (dataStore.tiposReuniao || []).find((t) => String(t.id) === String(id));
+	if (encontrado) return encontrado.descricao;
+	return typeof id === 'string' && isNaN(Number(id)) ? id : null;
 }
 
 function _getInscricoesPorAgendamento(agendamentoId) {

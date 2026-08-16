@@ -39,6 +39,11 @@ class UiComponents {
 			.then((text) => {
 				this.home = text;
 			});
+		await fetch(`js/ui/components/painel-tipo-reuniao.html`)
+			.then((response) => response.text())
+			.then((text) => {
+				this.painelTipoReuniao = text;
+			});
 	}
 
 	Home() {
@@ -67,5 +72,9 @@ class UiComponents {
 
 	PainelAgendamentos() {
 		return this.painelAgendamentos;
+	}
+
+	PainelTipoReuniao() {
+		return this.painelTipoReuniao;
 	}
 }
