@@ -20,3 +20,7 @@ function irParaTelaRegrasDatas() {
 function irParaTelaAgendamentos() {
 	navigateTo(abrirTelaAgendamentos);
 }
+
+function irParaTelaTiposReuniao() {
+	navigateTo(() => guardAdmin(abrirTelaTiposReuniao));
+}
