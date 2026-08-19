@@ -100,7 +100,10 @@ function montarPayloadTipoReuniao() {
 	const descricao = document.getElementById('tipoReuniaoDescricao').value.trim();
 
 	if (!descricao) {
-		mostrarErroCampo('erroValidacaoCamposTipoReuniao', 'Informe a descrição do tipo de reunião');
+		mostrarErroCampo(
+			'erroValidacaoCamposTipoReuniao',
+			'Informe a descrição do tipo de reunião',
+		);
 		return null;
 	}
 
@@ -166,7 +169,9 @@ async function salvarTipoReuniao() {
 
 		abrirModalAviso(
 			'Sucesso',
-			payload.id ? 'Tipo de reunião editado com sucesso' : 'Tipo de reunião criado com sucesso',
+			payload.id
+				? 'Tipo de reunião editado com sucesso'
+				: 'Tipo de reunião criado com sucesso',
 		);
 
 		await reloadTiposReuniao();
@@ -220,7 +225,8 @@ async function editarTipoReuniao(id, btnEditar) {
 
 function excluirTipoReuniao(id, btnTrash) {
 	document.getElementById('confirmTitle').innerText = 'Excluir Tipo de Reunião';
-	document.getElementById('confirmMessage').innerText = 'Deseja realmente excluir este tipo de reunião?';
+	document.getElementById('confirmMessage').innerText =
+		'Deseja realmente excluir este tipo de reunião?';
 
 	const btnOk = document.getElementById('confirmOk');
 	btnOk.onclick = null;

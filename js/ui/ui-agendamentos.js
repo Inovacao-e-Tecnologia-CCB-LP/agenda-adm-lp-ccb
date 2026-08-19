@@ -117,7 +117,7 @@ function _carregarCoresSalvas() {
 function _salvarCores() {
 	try {
 		localStorage.setItem('agenda_cores_locais', JSON.stringify(_calCoresLocais));
-	} catch { }
+	} catch {}
 }
 
 function _getCorLocal(localId) {
@@ -583,7 +583,8 @@ function _abrirDetalhesDia(dia, eventosJson) {
           </div>
 
           <!-- TIPO DE REUNIÃO -->
-          ${tipoReuniaoDesc
+          ${
+				tipoReuniaoDesc
 					? `
 <div class="cal-det-row">
 	<i class="bi bi-people-fill" style="color:${cor.dot}"></i>
@@ -591,10 +592,11 @@ function _abrirDetalhesDia(dia, eventosJson) {
 </div>
 `
 					: ''
-				}
+			}
 
           <!-- RESPONSÁVEL -->
-          ${p.responsavel
+          ${
+				p.responsavel
 					? `
 <div class="cal-det-row">
 	<i class="bi bi-person" style="color:${cor.dot}"></i>
@@ -602,10 +604,11 @@ function _abrirDetalhesDia(dia, eventosJson) {
 </div>
 `
 					: ''
-				}
+			}
 
           <!-- OBSERVAÇÕES -->
-          ${p.observacoes
+          ${
+				p.observacoes
 					? `
 <div class="cal-det-row align-items-start">
 	<i class="bi bi-chat-left-text mt-1" style="color:${cor.dot}"></i>
@@ -613,12 +616,13 @@ function _abrirDetalhesDia(dia, eventosJson) {
 </div>
 `
 					: ''
-				}
+			}
 
         </div>
 
-        ${podeEditarOuExcluir
-					? `
+        ${
+			podeEditarOuExcluir
+				? `
         <button class="btn btn-outline-primary btn-sm w-100 mt-2"
           onclick="_editarDoCalendario(${p.id})">
           <i class="bi bi-pencil me-1"></i>Editar
@@ -629,8 +633,8 @@ function _abrirDetalhesDia(dia, eventosJson) {
           <i class="bi bi-trash me-1"></i>Excluir
         </button>
         `
-					: ''
-				}
+				: ''
+		}
 
       </div>`;
 		})
@@ -777,7 +781,8 @@ function _abrirModalAgendamentos(agendamentos = null) {
 				dataStore.tiposReuniao = tipos || [];
 				const selectTipoReuniao = document.getElementById('progTipoReuniao');
 				if (selectTipoReuniao) {
-					selectTipoReuniao.innerHTML = '<option value="">Selecione o tipo de reunião</option>';
+					selectTipoReuniao.innerHTML =
+						'<option value="">Selecione o tipo de reunião</option>';
 					dataStore.tiposReuniao.forEach((t) => {
 						const opt = document.createElement('option');
 						opt.value = t.id;
@@ -1024,12 +1029,20 @@ function montarPayloadAgendamento() {
 	const horario_termino = document.getElementById('progHorarioTermino').value;
 	const observacoes = document.getElementById('progObs').value;
 
-	if (!local_id || !setor_id || !responsavel || !data || !horario) {
+	if (
+		!local_id ||
+		!setor_id ||
+		!tipo_reuniao ||
+		!responsavel ||
+		!data ||
+		!horario ||
+		!horario_termino
+	) {
 		mostrarErroCampo('erroValidacaoCamposAgendamento', 'Preencha todos os campos corretamente');
 		return null;
 	}
 
-	if (horario_termino && horario_termino <= horario) {
+	if (horario_termino <= horario) {
 		mostrarErroCampo(
 			'erroValidacaoCamposAgendamento',
 			'O horário de término deve ser maior que o horário de início',
