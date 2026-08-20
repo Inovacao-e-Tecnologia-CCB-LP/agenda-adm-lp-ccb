@@ -105,9 +105,9 @@
 
 					<!-- NOME -->
 					<div class="mb-3">
-						<label class="form-label">Nome do Local</label>
+						<label class="form-label">Nome do Local <span class="text-danger">*</span></label>
 						<input type="text" class="form-control" id="localNome" placeholder="Ex: Sala de Reunião"
-							data-input-filter="text-especial" />
+							data-input-filter="text-especial" required />
 
 						<!-- ERRO DO CAMPO -->
 						<div id="erroLocalNome" class="text-danger mt-1 d-none" style="font-size: 0.85rem"></div>
@@ -115,9 +115,9 @@
 
 					<!-- ENDEREÇO -->
 					<div class="mb-3">
-						<label class="form-label">Endereço</label>
+						<label class="form-label">Endereço <span class="text-danger">*</span></label>
 						<input type="text" class="form-control" id="localEndereco"
-							placeholder="Ex: Rua das Flores, 123 - Centro" data-input-filter="endereco" />
+							placeholder="Ex: Rua das Flores, 123 - Centro" data-input-filter="endereco" required />
 					</div>
 
 					<div id="erroValidacaoCamposLocal" class="text-danger mt-1 d-none" style="font-size: 0.85rem"></div>
@@ -149,9 +149,9 @@
 					<input type="hidden" id="setorId" />
 
 					<div class="mb-3">
-						<label class="form-label">Nome do setor</label>
+						<label class="form-label">Nome do setor <span class="text-danger">*</span></label>
 						<input type="text" class="form-control" id="setorNome" placeholder="Ex: Compras"
-							data-input-filter="text-especial" />
+							data-input-filter="text-especial" required />
 
 						<!-- ERRO DO CAMPO -->
 						<div id="erroSetorNome" class="text-danger mt-1 d-none" style="font-size: 0.85rem"></div>
@@ -187,9 +187,9 @@
 
 					<!-- LOCAL -->
 					<div class="mb-3">
-						<label class="form-label fw-semibold" for="regraLocal"><i
-								class="bi bi-geo-alt me-1"></i>Local</label>
-						<select class="form-select agenda-select" id="regraLocal">
+						<label class="form-label fw-semibold" for="regraLocal"><i class="bi bi-geo-alt me-1"></i>Local
+							<span class="text-danger">*</span></label>
+						<select class="form-select agenda-select" id="regraLocal" required>
 							<option value="">Selecione o local</option>
 						</select>
 					</div>
@@ -198,8 +198,9 @@
 					<div class="mb-3">
 						<label class="form-label fw-semibold" for="regraSetor">
 							<i class="bi bi-diagram-3 me-1"></i>Setor
+							<span class="text-danger">*</span>
 						</label>
-						<select class="form-select agenda-select" id="regraSetor">
+						<select class="form-select agenda-select" id="regraSetor" required>
 							<option value="">Selecione o setor</option>
 						</select>
 					</div>
@@ -262,15 +263,17 @@
 					<div class="row">
 						<div class="col-6">
 							<div class="form-floating mb-3">
-								<input type="time" class="form-control" id="regraHorario" placeholder="Início" />
-								<label for="regraHorario">Horário Início</label>
+								<input type="time" class="form-control" id="regraHorario" placeholder="Início"
+									required />
+								<label for="regraHorario">Horário Início <span class="text-danger">*</span></label>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-floating mb-3">
-								<input type="time" class="form-control" id="regraHorarioTermino"
-									placeholder="Término" />
-								<label for="regraHorarioTermino">Horário Término</label>
+								<input type="time" class="form-control" id="regraHorarioTermino" placeholder="Término"
+									required />
+								<label for="regraHorarioTermino">Horário Término <span
+										class="text-danger">*</span></label>
 							</div>
 						</div>
 					</div>
@@ -322,8 +325,9 @@
 					<div class="mb-3">
 						<label class="form-label fw-semibold" for="progLocal">
 							<i class="bi bi-geo-alt me-1"></i>Local
+							<span class="text-danger">*</span>
 						</label>
-						<select class="form-select agenda-select" id="progLocal">
+						<select class="form-select agenda-select" id="progLocal" required>
 							<option value="">Selecione o local</option>
 						</select>
 					</div>
@@ -332,8 +336,9 @@
 					<div class="mb-3">
 						<label class="form-label fw-semibold" for="progSetor">
 							<i class="bi bi-diagram-3 me-1"></i>Setor
+							<span class="text-danger">*</span>
 						</label>
-						<select class="form-select agenda-select" id="progSetor">
+						<select class="form-select agenda-select" id="progSetor" required>
 							<option value="">Selecione o setor</option>
 						</select>
 					</div>
@@ -342,8 +347,9 @@
 					<div class="mb-3">
 						<label class="form-label fw-semibold" for="progTipoReuniao">
 							<i class="bi bi-people-fill me-1"></i>Tipo de Reunião
+							<span class="text-danger">*</span>
 						</label>
-						<select class="form-select agenda-select" id="progTipoReuniao">
+						<select class="form-select agenda-select" id="progTipoReuniao" required>
 							<option value="">Selecione o tipo de reunião</option>
 						</select>
 					</div>
@@ -352,17 +358,19 @@
 					<div class="mb-3">
 						<label class="form-label fw-semibold" for="progResponsavel">
 							<i class="bi bi-person me-1"></i>Responsável
+							<span class="text-danger">*</span>
 						</label>
 						<input type="text" class="form-control" id="progResponsavel"
-							placeholder="Nome do responsável pelo agendamento" />
+							placeholder="Nome do responsável pelo agendamento" required />
 					</div>
 
 					<!-- DATA -->
 					<div class="mb-3">
 						<label for="progData" class="form-label fw-semibold">
 							<i class="bi bi-calendar-date me-1"></i>Data
+							<span class="text-danger">*</span>
 						</label>
-						<input type="date" class="form-control" id="progData" />
+						<input type="date" class="form-control" id="progData" required />
 					</div>
 
 					<!-- DIA DA SEMANA AUTOMÁTICO -->
@@ -379,16 +387,18 @@
 							<div class="mb-3">
 								<label for="progHorario" class="form-label fw-semibold">
 									<i class="bi bi-clock me-1"></i>Horário Início
+									<span class="text-danger">*</span>
 								</label>
-								<input type="time" class="form-control" id="progHorario" />
+								<input type="time" class="form-control" id="progHorario" required />
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="mb-3">
 								<label for="progHorarioTermino" class="form-label fw-semibold">
 									<i class="bi bi-clock-history me-1"></i>Horário Término
+									<span class="text-danger">*</span>
 								</label>
-								<input type="time" class="form-control" id="progHorarioTermino" />
+								<input type="time" class="form-control" id="progHorarioTermino" required />
 							</div>
 						</div>
 					</div>
@@ -541,7 +551,9 @@
 		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header bg-dark text-white">
-					<h5 class="modal-title" id="modalTipoReuniaoTitulo">Novo Tipo de Reunião</h5>
+					<h5 class="modal-title" id="modalTipoReuniaoTitulo">
+						Novo Tipo de Reunião
+					</h5>
 					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
 				</div>
 
@@ -549,9 +561,9 @@
 					<input type="hidden" id="tipoReuniaoId" />
 
 					<div class="mb-3">
-						<label class="form-label">Descrição</label>
+						<label class="form-label">Descrição <span class="text-danger">*</span></label>
 						<input type="text" class="form-control" id="tipoReuniaoDescricao"
-							placeholder="Ex: Reunião da administração" data-input-filter="text-especial" />
+							placeholder="Ex: Reunião da administração" data-input-filter="text-especial" required />
 
 						<!-- ERRO DO CAMPO -->
 						<div id="erroTipoReuniaoDescricao" class="text-danger mt-1 d-none" style="font-size: 0.85rem">

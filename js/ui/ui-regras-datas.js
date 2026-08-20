@@ -163,12 +163,12 @@ function montarPayloadRegra() {
 	const ativo = document.getElementById('regraAtivo').checked;
 	const intervalo_meses = document.getElementById('regraIntervaloMeses').value;
 
-	if (!localId || !setorId || !horario) {
+	if (!localId || !setorId || !horario || !horarioTermino) {
 		mostrarErroCampo('erroValidacaoCamposRegra', 'Preencha todos os campos corretamente');
 		return null;
 	}
 
-	if (horarioTermino && horarioTermino <= horario) {
+	if (horarioTermino <= horario) {
 		mostrarErroCampo(
 			'erroValidacaoCamposRegra',
 			'O horário de término deve ser maior que o horário de início',
