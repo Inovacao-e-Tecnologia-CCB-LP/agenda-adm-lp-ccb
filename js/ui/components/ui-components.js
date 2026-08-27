@@ -1,6 +1,6 @@
 class UiComponents {
 	constructor() {
-		this.getComponents();
+		this.ready = this.getComponents();
 	}
 
 	async getComponents() {

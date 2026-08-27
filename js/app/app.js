@@ -39,13 +39,23 @@ function updateBackButton() {
 async function init() {
 	esconderBotaoAdmin();
 	backButton.style.display = 'none';
+
 	setTitle('Carregando...');
 	conteudo.innerHTML = '<div class="spinner-border"></div>';
 
 	try {
-		dataStore = await appScriptApi.bootstrap();
+		const [bootstrapData] = await Promise.all([appScriptApi.bootstrap(), Ui.ready]);
+
+		if (!bootstrapData) {
+			throw new Error('BOOTSTRAP RETORNOU DADOS VAZIOS');
+		}
+
+		dataStore = bootstrapData;
+
 		navigateTo(showMenuInicial);
-	} catch {
+	} catch (error) {
+		console.error('ERRO NA INICIALIZAÇÃO:', error);
+
 		conteudo.innerHTML = '<div class="alert alert-danger">Erro ao carregar dados.</div>';
 	}
 }
