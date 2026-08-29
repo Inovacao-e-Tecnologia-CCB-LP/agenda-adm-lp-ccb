@@ -750,12 +750,71 @@ function _compartilharWhatsapp() {
 
 	const { ano, mes } = _calMeses[_calIdx];
 
-	const nomeMes = new Date(ano, mes, 1).toLocaleDateString('pt-BR', {
+	const nomeMesAno = new Date(ano, mes, 1).toLocaleDateString('pt-BR', {
 		month: 'long',
 		year: 'numeric',
 	});
 
-	const mensagem = `Calendário Salas de Reuniões de ${_capitalizar(nomeMes)} da Administração (Lençóis Paulista)`;
+	const eventosDoMes = _calDados
+		.filter((p) => _eventoEhDoMes(p, ano, mes))
+		.slice()
+		.sort((a, b) => {
+			if (a.data !== b.data) return a.data.localeCompare(b.data);
+			return (a.horario || '').localeCompare(b.horario || '');
+		});
+
+	let mensagem = `*CALENDÁRIO DE SALAS DE REUNIÕES*\n`;
+	mensagem += `Administração – Lençóis Paulista\n`;
+	mensagem += `*${_capitalizar(nomeMesAno)}*\n`;
+	mensagem += `━━━━━━━━━━━━━━━\n\n`;
+
+	if (!eventosDoMes.length) {
+		mensagem += `Nenhum agendamento neste mês.`;
+	} else {
+		const porDia = {};
+		eventosDoMes.forEach((p) => {
+			const dia = parseInt(p.data.split('-')[2], 10);
+			if (!porDia[dia]) porDia[dia] = [];
+			porDia[dia].push(p);
+		});
+
+		const dias = Object.keys(porDia)
+			.map(Number)
+			.sort((a, b) => a - b);
+
+		dias.forEach((dia) => {
+			const dataObj = new Date(ano, mes, dia);
+			const diaSemana = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+			const dataFormatada = `${String(dia).padStart(2, '0')}/${String(mes + 1).padStart(2, '0')}/${ano}`;
+
+			mensagem += `*${dataFormatada} - ${_capitalizar(diaSemana)}*\n`;
+
+			porDia[dia].forEach((p) => {
+				const local = _getLocalById(p.local_id);
+				const setorObj = _getSetorById(p.setor_id);
+				const tipoReuniaoDesc = _getTipoReuniaoById(p.tipo_reuniao ?? p.tipo_reuniao_id);
+
+				const horario = p.horario ? formatarHorario(p.horario) : '-';
+				const horarioTermino = p.horario_termino ? formatarHorario(p.horario_termino) : '';
+
+				mensagem += `\n*Local:* ${local?.nome || 'Não informado'}\n`;
+				mensagem += `*Horário:* ${horario}${horarioTermino ? ` às ${horarioTermino}` : ''}\n`;
+				mensagem += `*Setor:* ${setorObj?.nome || '-'}\n`;
+
+				if (tipoReuniaoDesc) {
+					mensagem += `*Tipo de Reunião:* ${tipoReuniaoDesc}\n`;
+				}
+				if (p.responsavel) {
+					mensagem += `*Responsável:* ${p.responsavel}\n`;
+				}
+				if (p.observacoes) {
+					mensagem += `*Observações:* ${p.observacoes}\n`;
+				}
+			});
+
+			mensagem += `\n━━━━━━━━━━━━━━━\n\n`;
+		});
+	}
 
 	const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
 
