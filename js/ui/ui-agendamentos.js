@@ -6,6 +6,11 @@ let _calMeses = [];
 let _calIdx = 0;
 let _calDados = [];
 let _calModoSomenteLeitura = false;
+let _calFiltros = {
+	localId: '',
+	setorId: '',
+	tipoReuniaoId: '',
+};
 
 /* =========================
    PALETA DE CORES DO CALENDÁRIO
@@ -141,6 +146,7 @@ function _getCorLocal(localId) {
 ========================= */
 async function abrirTelaAgendamentos() {
 	_calModoSomenteLeitura = false;
+	_calFiltros = { localId: '', setorId: '', tipoReuniaoId: '' };
 	setTitle('Agendar Sala');
 	conteudo.innerHTML = Ui.PainelAgendamentos();
 	await carregarAgendamentos(false);
@@ -150,6 +156,7 @@ async function abrirTelaCalendarioPublico() {
 	setTitle('Calendário');
 	conteudo.innerHTML = Ui.PainelAgendamentos();
 	_calModoSomenteLeitura = true;
+	_calFiltros = { localId: '', setorId: '', tipoReuniaoId: '' };
 	await carregarAgendamentos(false);
 	const btnNova = document.getElementById('novoAgendamentoBtn');
 	if (btnNova) btnNova.remove();
@@ -169,14 +176,7 @@ async function carregarAgendamentos(firstTime = false) {
 
 		if (agendamentos?.error) throw new Error(agendamentos.error);
 
-		if (!dataStore.tiposReuniao && typeof tipoReuniaoService !== 'undefined') {
-			try {
-				const tipos = await tipoReuniaoService.listar();
-				if (tipos && !tipos.error) dataStore.tiposReuniao = tipos;
-			} catch (e) {
-				console.error('Erro ao carregar tipos de reunião:', e);
-			}
-		}
+		await _carregarOpcoesFiltros();
 
 		agendamentos = agendamentos || [];
 		dataStore.agendamentos = agendamentos;
@@ -242,7 +242,9 @@ function _renderCalendario() {
 	const temAnterior = _calIdx > 0;
 	const temProximo = _calIdx < _calMeses.length - 1;
 
-	const pgMes = _calDados.filter((p) => _eventoEhDoMes(p, ano, mes));
+	const pgMes = _calDados.filter(
+		(p) => _eventoEhDoMes(p, ano, mes) && _eventoAtendeFiltros(p),
+	);
 
 	const porDia = {};
 	pgMes.forEach((p) => {
@@ -272,6 +274,8 @@ function _renderCalendario() {
         </button>
       </div>
 
+      ${_renderFiltrosCalendario()}
+
       ${_renderMiniNav()}
 
       <div class="cal-grid-wrapper" id="calGridWrapper">
@@ -284,6 +288,97 @@ function _renderCalendario() {
 
     </div>
   `;
+}
+
+async function _carregarOpcoesFiltros() {
+	const fontes = [
+		['locais', typeof locaisService !== 'undefined' ? locaisService : null],
+		['setores', typeof setoresService !== 'undefined' ? setoresService : null],
+		['tiposReuniao', typeof tipoReuniaoService !== 'undefined' ? tipoReuniaoService : null],
+	];
+
+	await Promise.all(
+		fontes.map(async ([chave, service]) => {
+			if (!service) return;
+			try {
+				const dados = await service.listar();
+				if (dados && !dados.error) dataStore[chave] = dados;
+			} catch (erro) {
+				console.error(`Erro ao carregar opções de filtro (${chave}):`, erro);
+			}
+		}),
+	);
+}
+
+function _renderFiltrosCalendario() {
+	const locais = dataStore.locais || [];
+	const setores = dataStore.setores || [];
+	const tipos = dataStore.tiposReuniao || [];
+	if (!locais.length && !setores.length && !tipos.length) return '';
+
+	return `
+    <div class="cal-filtros">
+      <div class="cal-filtros-cabecalho">
+        <span class="cal-filtro-label"><i class="bi bi-funnel me-1"></i>Filtrar calendário</span>
+        <button type="button" class="btn btn-link btn-sm cal-filtros-limpar" onclick="_calLimparFiltros()" ${_calTemFiltrosAtivos() ? '' : 'disabled'}>Limpar filtros</button>
+      </div>
+      <div class="cal-filtros-campos">
+        ${_renderSelectFiltro('localId', 'Local', locais, 'nome')}
+        ${_renderSelectFiltro('setorId', 'Setor', setores, 'nome')}
+        ${_renderSelectFiltro('tipoReuniaoId', 'Tipo de reunião', tipos, 'descricao')}
+      </div>
+    </div>`;
+}
+
+function _renderSelectFiltro(chave, rotulo, itens, campoNome) {
+	const opcoes = itens
+		.map(
+			(item) =>
+				`<option value="${_escaparHtml(item.id)}" ${String(item.id) === String(_calFiltros[chave]) ? 'selected' : ''}>${_escaparHtml(item[campoNome] || 'Sem descrição')}</option>`,
+		)
+		.join('');
+
+	return `
+    <div class="cal-filtro">
+      <label for="calFiltro${chave}">${rotulo}</label>
+      <select id="calFiltro${chave}" class="form-select form-select-sm" onchange="_calAtualizarFiltro('${chave}', this.value)">
+        <option value="">Todos</option>
+        ${opcoes}
+      </select>
+    </div>`;
+}
+
+function _calAtualizarFiltro(chave, valor) {
+	if (!(chave in _calFiltros)) return;
+	_calFiltros[chave] = valor;
+	_renderCalendario();
+}
+
+function _calLimparFiltros() {
+	_calFiltros = { localId: '', setorId: '', tipoReuniaoId: '' };
+	_renderCalendario();
+}
+
+function _calTemFiltrosAtivos() {
+	return Object.values(_calFiltros).some(Boolean);
+}
+
+function _eventoAtendeFiltros(evento) {
+	const tipoId = evento.tipo_reuniao ?? evento.tipo_reuniao_id;
+	return (
+		(!_calFiltros.localId || String(evento.local_id) === String(_calFiltros.localId)) &&
+		(!_calFiltros.setorId || String(evento.setor_id) === String(_calFiltros.setorId)) &&
+		(!_calFiltros.tipoReuniaoId || String(tipoId) === String(_calFiltros.tipoReuniaoId))
+	);
+}
+
+function _escaparHtml(valor) {
+	return String(valor ?? '')
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;');
 }
 
 function _renderGrade(ano, mes, porDia) {
@@ -339,13 +434,11 @@ function _renderGrade(ano, mes, porDia) {
 			}
 		}
 
-		// Pílulas: bolinhas no mobile, barras com nome no desktop
+		// Renderiza todos os agendamentos para que também constem em imagens e PDFs.
 		let pilulasHtml = '';
 
 		if (temEvento) {
-			const MAX = 3;
-
-			eventos.slice(0, MAX).forEach((ev) => {
+			eventos.forEach((ev) => {
 				const cor = _getCorLocal(ev.local_id);
 				const local = _getLocalById(ev.local_id);
 				const nome = local?.nome || 'Local';
@@ -380,9 +473,6 @@ function _renderGrade(ano, mes, porDia) {
 				}
 			});
 
-			if (eventos.length > MAX) {
-				pilulasHtml += `<span class="cal-ev-mais">+${eventos.length - MAX}</span>`;
-			}
 		}
 
 		const enc = encodeURIComponent(JSON.stringify(eventos)).replace(/'/g, '%27');
@@ -410,7 +500,9 @@ function _renderLegenda() {
 	// Pega apenas os locais que têm agendamento no mês atual
 	const { ano, mes } = _calMeses[_calIdx];
 	const locaisNoMes = new Set(
-		_calDados.filter((p) => _eventoEhDoMes(p, ano, mes)).map((p) => p.local_id),
+		_calDados
+			.filter((p) => _eventoEhDoMes(p, ano, mes) && _eventoAtendeFiltros(p))
+			.map((p) => p.local_id),
 	);
 
 	if (!locaisNoMes.size) return '';
